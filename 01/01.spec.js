@@ -16,4 +16,15 @@ describe("day 1", () => {
             expect(sums).to.equal(expected);
         })
     );
+
+    [
+    {input:'sample', expected: 45000}, 
+    {input:'input', expected: 203203}
+    ].forEach(({input,expected}) => 
+        it(`finds three elves with most food in ${input}`, () => {
+            let path = __dirname + `/${input}.txt`;
+            let sums = day1.threeHeaviestElves(path);
+            expect(sums).to.equal(expected);
+        })
+    );
 })
