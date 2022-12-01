@@ -15,17 +15,11 @@ function getSums(path) {
 }
 
 export default {
-    heaviestElf(path) {
-        let sums = getSums(path);
-        let max = sums.reduce((max, cur) => cur > max ? cur : max, 0);
-        return max;
-    },
-    threeHeaviestElves(path) {
-        let sums = getSums(path);
-        let threeTotal = sums
-            .sort((a,b) => b - a)
-            .slice(0, 3)
-            .reduce((s, c) => s + c, 0);
-        return threeTotal;
-    }
+    heaviestElf: (path) => getSums(path)
+        .reduce((m, c) => c > m ? c : m, 0)
+        ,
+    threeHeaviestElves: (path) => getSums(path)
+        .sort((a,b) => b - a)
+        .slice(0, 3)
+        .reduce((s, c) => s + c, 0)
 }
