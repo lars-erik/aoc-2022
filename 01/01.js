@@ -1,7 +1,4 @@
-import fs from "fs";
-
-function getSums(path) {
-    let data = fs.readFileSync(path, {encoding:'utf8', flag:'r'});
+function getSums(data) {
     let lines = data.replace('\r', '').split('\n');
     let sums = lines.reduce((elves, line) => {
         if (line.length === 1) {
@@ -15,10 +12,10 @@ function getSums(path) {
 }
 
 export default {
-    heaviestElf: (path) => getSums(path)
+    heaviestElf: (data) => getSums(data)
         .reduce((m, c) => c > m ? c : m, 0)
         ,
-    threeHeaviestElves: (path) => getSums(path)
+    threeHeaviestElves: (data) => getSums(data)
         .sort((a,b) => b - a)
         .slice(0, 3)
         .reduce((s, c) => s + c, 0)
