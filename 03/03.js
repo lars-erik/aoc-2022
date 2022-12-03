@@ -26,3 +26,18 @@ export function sumPriorities(input) {
     let sum = priorities.reduce((a, b) => a + b, 0);
     return sum;
 }
+
+export function sumGroupPriorities(input) {
+    let lines = asLines(getData(import.meta, input));
+    let groupItems = [];
+    for(let i = 0; i<lines.length; i+=3) {
+        for(let j = 0; j<lines[i].length; j++) {
+            if (lines[i+1].indexOf(lines[i][j]) > -1
+             && lines[i+2].indexOf(lines[i][j]) > -1) {
+                groupItems.push(lines[i][j]);
+                break;
+             }
+        }
+    }
+    return groupItems.map(priority).reduce((a, b) => a + b, 0);
+}
