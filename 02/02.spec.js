@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { getData } from './../common/input.js';
-import { identifyEach, score } from './02.js';
+import { identifyEach, score, scoreByStrategy } from './02.js';
 
 describe("scoring rps", () => {
     [
@@ -25,13 +25,13 @@ describe("scoring rps", () => {
     );
 
     [
-        {input:'sample', expected: 12},
-        {input:'input', expected: 0},
-        ].forEach(({input, expected}) =>
-        it(`scores each side for b requirement${input}`, () => {
-            let data  = getData(import.meta, input);
-            let myScore = score(data);
-            expect(myScore).to.equal(expected);
-        })
-        );
+    {input:'sample', expected: 12},
+    {input:'input', expected: 14979},
+    ].forEach(({input, expected}) =>
+    it(`scores each side for b requirement${input}`, () => {
+        let data  = getData(import.meta, input);
+        let myScore = scoreByStrategy(data);
+        expect(myScore).to.equal(expected);
+    })
+    );
     });
