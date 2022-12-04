@@ -47,9 +47,11 @@ const materialOptions = {
     uniforms: {
         u_time: { value: 0 },
         u_speed: { value: 1.0 },
+        width: { value: 20 },
         pairs: {
             value: pairs.map(pair => {
-                return new Vector4(pair.a.x1*10, pair.a.x2*10, pair.b.x1*10, pair.b.x2*10);
+                const wr = 20;
+                return new Vector4(pair.a.x1*wr, pair.a.x2*wr, pair.b.x1*wr, pair.b.x2*wr);
             })
         }
     }
