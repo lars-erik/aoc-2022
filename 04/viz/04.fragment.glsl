@@ -11,7 +11,7 @@ void main () {
     vec2 uv = (fragCoord-.5) * iResolution.xy/iResolution.y*2.;
     vec3 color = vec3(0.0);
     float x = fragCoord.x * iResolution.x;
-    int y = int(((fragCoord.y*-1. + u_time / 10.) / 20.) * iResolution.y);
+    int y = int(((fragCoord.y*-1. + u_time / 10.) / width) * iResolution.y);
     vec4 pair = pairs[y];
 
     bool isFullOverlapA = pair.x >= pair.z && pair.x <= pair.w && pair.y >= pair.z && pair.y <= pair.w;

@@ -2,7 +2,6 @@ import {
     Scene,
     OrthographicCamera,
     WebGLRenderer,
-    Vector2,
     Vector4,
     Mesh,
     PlaneGeometry,
@@ -14,32 +13,23 @@ import basicVertex from './basic.vertex.glsl';
 import fragment from './04.fragment.glsl';
 import { parse } from './../04.js'
 
-/*
-import { GUI } from 'dat.gui';
-
-import shaders from './shaders';
-*/
-
 import data from './data.js';
 const pairs = parse(data);
 console.log(pairs.length);
 
 const container = document.querySelector("#shader");
 
-
-/*
-const reqShader = (location.hash || "#").substring(1);
-
-const current = {
-    shader: shaders[reqShader] ? reqShader : 'tmcurve01'
-};
-*/
-
 const defaultUniforms = {
     u_time: { value: 0 },
     iResolution: { value: [container.clientWidth, container.clientHeight, 0] }
 };
 
+let width = container.clientWidth / 100 * .99;
+console.log(width);
+
+const mapPairs = () => pairs.map(pair => {
+    return new Vector4(pair.a.x1*width, pair.a.x2*width, pair.b.x1*width, pair.b.x2*width);
+});
 
 const materialOptions = {
     vertexShader: basicVertex,
@@ -47,30 +37,20 @@ const materialOptions = {
     uniforms: {
         u_time: { value: 0 },
         u_speed: { value: 1.0 },
-        width: { value: 20 },
+        width: { value: width },
         pairs: {
-            value: pairs.map(pair => {
-                const wr = 20;
-                return new Vector4(pair.a.x1*wr, pair.a.x2*wr, pair.b.x1*wr, pair.b.x2*wr);
-            })
+            value: mapPairs()
         }
     }
 }
 
-/*
-function buildGui(gui, mat) {
-    gui.add(mat.uniforms.u_speed, 'value', 0.1, 5.0, .1).name('Speed');
-    gui.add(mat.uniforms.scale, 'value', 0.1, 20.0, .1).name('Scale');
-    gui.add(mat.uniforms.octaves, 'value', 1.0, 10.0, 1).name('Octaves');
-    gui.add(mat.uniforms.turbulence, 'value').name('Turbulence');
-}
-*/
-
 let material = { materialOptions };
-//let gui = new GUI();
 let mat = {};
 
 function resize() {
+    width = container.clientWidth / 100 * .99;
+    materialOptions.uniforms.width.value = width;
+    materialOptions.uniforms.pairs.value = mapPairs();
     renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
@@ -105,9 +85,6 @@ scene.add(plane);
 
 const clock = new Clock();
 clock.start();
-
-//gui.add(current, 'shader', Object.keys(shaders)).onChange(shaderChanged);
-//material.buildGui(gui, mat);
 
 container.appendChild(renderer.domElement);
 window.addEventListener("resize", resize);
