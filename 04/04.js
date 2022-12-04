@@ -17,10 +17,10 @@ function isOverlap(a, b) {
 function createPair(line) {
     let pair = line.split(',')
         .map(segs => {
-            let ids = segs.split('-');
+            let ids = segs.split('-').map(Number);
             return {
-                x1: Number(ids[0]),
-                x2: Number(ids[1])
+                x1: ids[0],
+                x2: ids[1]
             }
         });
     let obj = {
