@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha **/*.spec.js",
     "watch-test": "nodemon --exec \"mocha **/*.spec.js || exit 1\"",
-    "build": "vite"
+    "watch": "vite",
+    "build": "vite build"
   },
   "author": "",
   "license": "ISC",
