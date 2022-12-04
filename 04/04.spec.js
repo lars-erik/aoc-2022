@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { totalFullOverlaps, totalOverlaps } from './04.js';
 
-describe.only("cleaning the beach", () => {
+describe("cleaning the camp", () => {
     [
     {input:'sample', expected: 2},
     {input:'debug', expected: 1},
