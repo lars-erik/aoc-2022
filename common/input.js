@@ -15,3 +15,7 @@ export function getData(meta, input) {
 export function asLines(data) {
     return data.replace(/\r/g, '').split('\n');
 }
+
+export function writeData(meta, name, data) {
+    fs.writeFileSync(fullPath(meta, name), data, {encoding: 'utf8'});
+}
