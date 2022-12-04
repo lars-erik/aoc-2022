@@ -1,55 +1,54 @@
 import { asLines, getData, writeData } from './../common/input.js';
 
-function isFullOverlap(a, b) {
-    return a.x1 >= b.x1 
-        && a.x1 <= b.x2
-        && a.x2 >= b.x1
-        && a.x2 <= b.x2;
-}
+class Segment {
 
-function isOverlap(a, b) {
-    return (a.x1 >= b.x1
-        && a.x1 <= b.x2)
-        || (a.x2 >= b.x1
-        && a.x2 <= b.x2);
-}
-
-function createPair(line) {
-    let pair = line.split(',')
-        .map(segs => {
-            let ids = segs.split('-').map(Number);
-            return {
-                x1: ids[0],
-                x2: ids[1]
-            }
-        });
-    let obj = {
-        a: pair[0],
-        b: pair[1],
-        hasFullOverlap: isFullOverlap(pair[0], pair[1]) || isFullOverlap(pair[1], pair[0]),
-        hasOverlap: isOverlap(pair[0], pair[1]) || isOverlap(pair[1], pair[0])
+    constructor(x1, x2) {
+        this.x1 = x1[0] || x1;
+        this.x2 = x1[1] || x2;
     }
-    return obj;
+
+    static fromString = (value) => new Segment(value.split('-').map(Number));
+
+    isFullOverlap = (b) =>
+        this.x1 >= b.x1
+        && this.x1 <= b.x2
+        && this.x2 >= b.x1
+        && this.x2 <= b.x2;
+
+    isOverlap = (b) =>
+        this.x1 >= b.x1
+        && this.x1 <= b.x2
+        || this.x2 >= b.x1
+        && this.x2 <= b.x2;
 }
 
-export function totalFullOverlaps(input) {
-    let lines = asLines(getData(import.meta, input));
-    let pairs = lines.map(createPair);
-    
-    let pairsOfTotalOverlap = pairs.filter(p => {
-        return p.hasFullOverlap;
-    });
+class Pair {
 
-    return pairsOfTotalOverlap.length;
+    constructor(a, b) {
+        this.a = a[0] || a;
+        this.b = a[1] || b;
+    }
+
+    static fromString = (value) => new Pair(value.split(',').map(Segment.fromString));
+
+    hasFullOverlap = () =>
+        this.a.isFullOverlap(this.b)
+        || this.b.isFullOverlap(this.a);
+
+    hasOverlap = () =>
+        this.a.isOverlap(this.b)
+        || this.b.isOverlap(this.a);
+
 }
 
-export function totalOverlaps(input) {
-    let lines = asLines(getData(import.meta, input));
-    let pairs = lines.map(createPair);
-    
-    let pairsOfOverlap = pairs.filter(p => {
-        return p.hasOverlap;
-    });
+const parse = (input) => asLines(getData(import.meta, input)).map(Pair.fromString);
 
-    return pairsOfOverlap.length;
-}
+export const totalFullOverlaps = (input) => 
+    parse(input)
+        .filter(p => p.hasFullOverlap())
+        .length;
+
+export const totalOverlaps = (input) =>
+    parse(input)
+        .filter(p => p.hasOverlap())
+        .length;
