@@ -1,4 +1,4 @@
-import { asLines, getData, writeData } from './../common/input.js';
+import { asLines } from './../common/parsing.js';
 
 class Segment {
 
@@ -41,14 +41,14 @@ class Pair {
 
 }
 
-const parse = (input) => asLines(getData(import.meta, input)).map(Pair.fromString);
+export const parse = (data) => asLines(data).map(Pair.fromString);
 
-export const totalFullOverlaps = (input) => 
-    parse(input)
+export const totalFullOverlaps = (data) => 
+    parse(data)
         .filter(p => p.hasFullOverlap())
         .length;
 
-export const totalOverlaps = (input) =>
-    parse(input)
+export const totalOverlaps = (data) =>
+    parse(data)
         .filter(p => p.hasOverlap())
         .length;

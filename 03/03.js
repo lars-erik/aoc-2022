@@ -1,4 +1,5 @@
-import { asLines, getData } from './../common/input.js'
+import { getData } from './../common/input.js'
+import { asLines } from './../common/parsing.js'
 
 function findCommonItem(line) {
     let partA = line.substring(0, line.length / 2);

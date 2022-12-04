@@ -1,4 +1,4 @@
-import { asLines } from './../common/input.js'
+import { asLines } from './../common/parsing.js'
 
 const ROCK = 1;
 const PAPER = 2;

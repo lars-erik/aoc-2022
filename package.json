@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "mocha **/*.spec.js",
-    "watch-test": "nodemon --exec \"mocha **/*.spec.js || exit 1\""
+    "watch-test": "nodemon --exec \"mocha **/*.spec.js || exit 1\"",
+    "build": "vite"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,10 @@
     "chai": "^4.3.7",
     "mocha": "^10.1.0",
     "nodemon": "^2.0.20",
-    "vite": "^3.2.4"
+    "vite": "^3.2.4",
+    "vite-plugin-glsl": "^0.5.4"
+  },
+  "dependencies": {
+    "three": "^0.147.0"
   }
 }
