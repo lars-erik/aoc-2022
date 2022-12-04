@@ -9,6 +9,7 @@ export default defineConfig({
     build: {
         lib: {
             name: 'aoc-2022',
+            formats: ['es'],
             entry: {
                 d04: './04/viz/index.html'
             }
