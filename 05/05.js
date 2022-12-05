@@ -2,7 +2,6 @@ import { asLines } from './../common/parsing.js';
 
 function getPuzzle(data) {
     let lines = asLines(data);
-    console.log(lines);
     let stackCols = [];
     let i = 0;
     for(; i < lines.length; i++) {
