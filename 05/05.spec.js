@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { getData } from './../common/input.js';
-import { findTopBoxes } from './05.js';
+import { findTopByToH, findTopByEfficient } from './05.js';
 
 describe.only('supply stacks', () => {
     [
@@ -9,7 +9,18 @@ describe.only('supply stacks', () => {
     {input:'input', expected: 'FJSRQCFTN'}
     ].forEach(({input, expected}) =>
     it("executes moves for first task", () => {
-        let result = findTopBoxes(getData(import.meta, input));
+        let result = findTopByToH(getData(import.meta, input));
+        console.log(result);
+        expect(result).to.equal(expected);
+    }));
+
+    [
+    {input:'sample', expected: 'MCD'},
+    //{input:'debug', expected: 1},
+    {input:'input', expected: 'CJVLJQPHS'}
+    ].forEach(({input, expected}) =>
+    it("executes moves for first task", () => {
+        let result = findTopByEfficient(getData(import.meta, input));
         console.log(result);
         expect(result).to.equal(expected);
     }));

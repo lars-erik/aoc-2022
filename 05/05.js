@@ -1,6 +1,6 @@
 import { asLines } from './../common/parsing.js';
 
-export function findTopBoxes(data) {
+function getPuzzle(data) {
     let lines = asLines(data);
     console.log(lines);
     let stackCols = [];
@@ -28,6 +28,16 @@ export function findTopBoxes(data) {
         
         moves.push(instr);
     }
+    let puzzle = {
+        stackCols,
+        moves
+    }
+    return puzzle;
+}
+
+export function findTopByToH(data) {
+    let {stackCols, moves} = getPuzzle(data);
+
     for(let i = 0; i<moves.length; i++) {
         let inst = moves[i];
         let count = inst[0];
@@ -37,6 +47,25 @@ export function findTopBoxes(data) {
         for (let j = 0; j<count; j++) {
             let val = stackCols[from].pop();
             stackCols[to].push(val);
+        }
+    }
+
+    return stackCols.map(c => c[c.length - 1]).join('');
+}
+
+export function findTopByEfficient(data) {
+    let {stackCols, moves} = getPuzzle(data);
+
+    for(let i = 0; i<moves.length; i++) {
+        let inst = moves[i];
+        let count = inst[0];
+        let from = inst[1] - 1;
+        let to = inst[2] - 1;
+
+        const fromArr = stackCols[from];
+        let things = fromArr.splice(fromArr.length - count, count);
+        for(let j = 0; j < things.length; j++) {
+            stackCols[to].push(things[j]);
         }
     }
 
