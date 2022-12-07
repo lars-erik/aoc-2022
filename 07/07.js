@@ -1,38 +1,56 @@
 import { asLines } from './../common/parsing.js';
 
+
 export function sumSmallFolders(data) {
+    let parsed = parse(data);
+
+    let candidates = parsed.all.filter(x => x.totalSize() <= 100000);
+
+    return candidates.reduce((s, c) => s + c.totalSize(), 0);
+}
+
+export function folderToDelete(data) {
+    const totalSize = 70_000_000;
+    const totalNeeded = 30_000_000;
+    let parsed = parse(data);
+    let used = parsed.root.totalSize();
+    let free = totalSize - used;
+
+    let candidates = parsed.all
+        .filter(d => (free + d.totalSize()) >= totalNeeded)
+        .sort((a, b) => a.totalSize() - b.totalSize());
+
+    return {name:candidates[0].name, size:candidates[0].totalSize()};
+}
+
+function cd(root, current, dir) {
+    switch(dir) {
+        case '..': return current.parent;
+        case '/': return root;
+        default: return current.dirs.filter(x => x.name == dir)[0]
+    }
+}
+
+export function parse(data) {
     let lines = asLines(data);
-    let root = {
-        path: [],
-        dirs: [],
-        files: [],
-        parent: null
-    };
+    let root = new Directory();
     let current = root;
-    for(let i = 0; i<lines.length; i++) {
+    let all = [root];
+    for (let i = 0; i < lines.length; i++) {
         let parts = lines[i].split(' ');
         if (parts[0] === '$') {
-            switch(parts[1]) {
+            switch (parts[1]) {
                 case 'cd':
-                    if (parts[2] === '..') {
-                        current = current.parent;
-                    } else if (parts[2] === '/') {
-                        current = root;
-                    } else {
-                        current = current.dirs.filter(x => x.path[x.path.length-1] == parts[2])[0];
-                    }
+                    current = cd(root, current, parts[2]);
                     break;
-                case 'ls': 
+                case 'ls':
                     let count = 0;
-                    for(let j = i + 1; j < lines.length && lines[j].indexOf("$") === -1; j++) {
+                    for (let j = i + 1; j < lines.length && lines[j].indexOf("$") === -1; j++) {
                         let parts = lines[j].split(' ');
                         if (parts[0] === 'dir') {
-                            current.dirs.push({
-                                path: current.path.concat(parts[1]),
-                                dirs: [],
-                                files: [],
-                                parent: current
-                            });
+                            const newDir = new Directory(current, parts[1]);
+                            all.push(newDir);
+                            current.dirs.push(newDir);
                         } else {
                             current.files.push({
                                 name: parts[1],
@@ -46,19 +64,37 @@ export function sumSmallFolders(data) {
             }
         }
     }
-
-    writeNode({dirs:[root], files:[]});
-
-    return -1;
+    let parsed = { root, all };
+    return parsed;
 }
 
-function writeNode(node, indent = '') {
-    for(let j = 0; j<node.dirs.length; j++) {
-        console.log(indent + '/' + node.dirs[j].path.join('/'));
-        writeNode(node.dirs[j], indent + '  ');
+class Directory
+{
+    path = [];
+    dirs = [];
+    files = [];
+
+    constructor(parent, name) {
+        this.parent = parent;
+        this.name = name || '/';
+        this.path = parent ? parent.path.concat(name) : [];
     }
-    for(let j = 0; j<node.files.length; j++) {
-        let f = node.files[j];
-        console.log(indent + f.size + " " + f.name);
+
+    localSize() {
+        return this.files.reduce((s, f) => s + f.size, 0);
+    }
+
+    totalSize() {
+        return this.localSize() + this.dirs.reduce((s, d) => s + d.totalSize(), 0);
+    }
+
+    writeTo(out, indent = '') {
+        this.dirs.forEach(dir => {
+            out(`${indent} + ${dir.name} (dir) (${dir.localSize()}) (${dir.totalSize()})`);
+            dir.writeTo(out, indent + ' |');
+        });
+        this.files.forEach(file => {
+            out(`${indent} + ${file.name} (${file.size})`);
+        });
     }
 }
