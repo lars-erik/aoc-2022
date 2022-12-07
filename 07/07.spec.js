@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import { getData } from './../common/input.js';
 import { sumSmallFolders, folderToDelete, parse } from './07.js';
 
-describe.only("freeing up space", () => {
+describe("freeing up space", () => {
     [
     {input:'sample', expected: 48381165},
     ].forEach(({input, expected}) => 
-    it(`parses ${input}`, () => {
+    xit(`parses ${input}`, () => {
         let result = parse(getData(import.meta, input));
         result.root.writeTo(console.log);
         expect(result.root.totalSize()).to.equal(expected);

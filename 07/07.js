@@ -23,49 +23,73 @@ export function folderToDelete(data) {
     return {name:candidates[0].name, size:candidates[0].totalSize()};
 }
 
-function cd(root, current, dir) {
-    switch(dir) {
-        case '..': return current.parent;
-        case '/': return root;
-        default: return current.dirs.filter(x => x.name == dir)[0]
-    }
+export function parse(data) {
+    return new Parser(data).parse();
 }
 
-export function parse(data) {
-    let lines = asLines(data);
-    let root = new Directory();
-    let current = root;
-    let all = [root];
-    for (let i = 0; i < lines.length; i++) {
-        let parts = lines[i].split(' ');
-        if (parts[0] === '$') {
-            switch (parts[1]) {
-                case 'cd':
-                    current = cd(root, current, parts[2]);
-                    break;
-                case 'ls':
-                    let count = 0;
-                    for (let j = i + 1; j < lines.length && lines[j].indexOf("$") === -1; j++) {
-                        let parts = lines[j].split(' ');
-                        if (parts[0] === 'dir') {
-                            const newDir = new Directory(current, parts[1]);
-                            all.push(newDir);
-                            current.dirs.push(newDir);
-                        } else {
-                            current.files.push({
-                                name: parts[1],
-                                size: Number(parts[0])
-                            });
-                        }
-                        count++;
-                    }
-                    i += count ? count - 1 : 0;
-                    break;
+class Parser
+{
+    constructor(data) {
+        this.lines = asLines(data);
+        this.root = new Directory();
+        this.current = this.root;
+        this.all = [this.root];
+    }
+
+    parse() {
+        for (let i = 0; i < this.lines.length; i++) {
+            let parts = this.lines[i].split(' ');
+            if (parts[0] === '$') {
+                i += this.execute(parts[1], parts[2], i);
             }
         }
+        let parsed = { root:this.root, all:this.all };
+        return parsed;
     }
-    let parsed = { root, all };
-    return parsed;
+
+    execute(command, args, i) {
+        switch (command) {
+            case 'cd': return this.cd(args);
+            case 'ls': return this.ls(i + 1);
+            default: throw new Error("No such command");
+        }
+    }
+
+    ls(startAt) {
+        let count = 0;
+        for (let i = startAt; i < this.lines.length && this.lines[i].indexOf("$") === -1; i++) {
+            this.parseLsLine(this.lines[i]);
+            count++;
+        }
+        return count ? count - 1 : 0;
+    }
+
+    cd(name) {
+        this.current = this.getDir(name);
+        return 0;
+    }
+
+    getDir(dir) {
+        switch(dir) {
+            case '..': return this.current.parent;
+            case '/': return this.root;
+            default: return this.current.dirs.filter(x => x.name == dir)[0]
+        }
+    }
+
+    parseLsLine(line) {
+        let parts = line.split(' ');
+        if (parts[0] === 'dir') {
+            const newDir = new Directory(this.current, parts[1]);
+            this.all.push(newDir);
+            this.current.dirs.push(newDir);
+        } else {
+            this.current.files.push({
+                name: parts[1],
+                size: Number(parts[0])
+            });
+        }
+    }
 }
 
 class Directory
