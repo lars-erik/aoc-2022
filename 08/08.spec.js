@@ -17,4 +17,22 @@ describe("treetop treehouse", () => {
             }
             expect(visible).to.equal(expected);
         }));
+
+    [
+        { input: 'sample', expected: 8 },
+        { input: 'input', expected: 321975 }
+    ].forEach(({ input, expected }) =>
+        it(`finds most scenic tree in ${input}`, () => {
+            let forest = discover(input);
+            let max = 0;
+            for (let y = 0; y < forest.length; y++) {
+                for(let x = 0; x < forest.length; x++) {
+                    const score = forest[y][x].scenicScore;
+                    if (score > max) {
+                        max = score;
+                    }
+                }
+            }
+            expect(max).to.equal(expected);
+        }));
 })
