@@ -1,5 +1,4 @@
 import { asLines } from './../common/parsing.js';
-import { getData } from './../common/input.js';
 
 class Forest {
     constructor(trees) {
@@ -65,8 +64,8 @@ class Tree {
     }
 }
 
-export function discover(input) {
-    let trees = asLines(getData(import.meta, input))
+export function discover(data) {
+    let trees = asLines(data)
         .map((l, y) => l.split('').map((t, x) => new Tree(x, y, Number(t))));
     let forest = new Forest(trees);
     forest.updateVisibility();

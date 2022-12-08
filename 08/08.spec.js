@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { discover } from './08.js';
+import { getData } from './../common/input.js';
 
 describe("treetop treehouse", () => {
     [
@@ -7,7 +8,7 @@ describe("treetop treehouse", () => {
         { input: 'input', expected: 1717 }
     ].forEach(({ input, expected }) =>
         it(`sees visible trees in ${input}`, () => {
-            let forest = discover(input);
+            let forest = discover(getData(import.meta, input));
             if (expected < 100) {
                 forest.trees.forEach(row =>
                     console.log(row.map(x => (x.visible ? '*' : 'o')).join(''))
@@ -21,7 +22,7 @@ describe("treetop treehouse", () => {
         { input: 'input', expected: 321975 }
     ].forEach(({ input, expected }) =>
         it(`finds most scenic tree in ${input}`, () => {
-            let forest = discover(input);
+            let forest = discover(getData(import.meta, input));
             let max = forest.trees.reduce((max, row) => 
                 row.reduce((max, tree) => 
                     tree.scenicScore > max
