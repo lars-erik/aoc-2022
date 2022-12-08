@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha **/*.spec.js",
+    "test-output": "mocha **/*.spec.js --reporter json --reporter-option output=testresults.json",
     "watch-test": "nodemon --exec \"mocha **/*.spec.js || exit 1\"",
     "watch": "vite",
     "build": "vite build"

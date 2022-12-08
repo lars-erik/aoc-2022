@@ -25,6 +25,16 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - run: npm ci
+      - run: npm run test-output
+
+      - name: Publish Test Results
+        uses: actions/upload-artifact@
+        if: success() || failure()
+        with:
+          name: Tests
+          path: testresults.json
+          reporter: mocha-json
+
       - run: npm run build
 
       - name: Deploy
