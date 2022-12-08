@@ -7,11 +7,13 @@ class Forest {
     }
 
     updateVisibility() {
+        let visible = 0;
         for (let y = 0; y < this.trees.length; y++) {
             for (let x = 0; x < this.trees[0].length; x++) {
-                this.trees[y][x].updateVisibility(this.trees);
+                visible += this.trees[y][x].updateVisibility(this.trees);
             }
         }
+        this.visibleTrees = visible;
     }
 }
 
@@ -22,87 +24,44 @@ class Tree {
         this.height = height;
     }
 
+    updateDirection(from, to, limit, dir, getTree) {
+        let seen = 0;
+        for (let i = from; limit(i); i += dir) {
+            const tree = getTree(i);
+            const notMe = tree !== this;
+            if (notMe) {
+                seen++;
+            }
+            if (notMe && tree.height >= this.height) {
+                break;
+            }
+            if (i === to) {
+                this.visible = true;
+            }
+        }
+        this.visibleTrees.push(seen);
+    }
+
     updateVisibility(trees) {
         this.visibleTrees = [];
         this.visible = false;
 
-        // Look north
-        let seen = 0;
-        if (this.y === 0) {
-            this.visible = true;
-        } else {
-            for (let y = this.y - 1; y >= 0; y--) {
-                if (trees[y][this.x].height < this.height) {
-                    seen++;
-                    if (y === 0) {
-                        this.visible = true;
-                    }
-                } else {
-                    seen++;
-                    break;
-                }
-            }
-        }
-        this.visibleTrees.push(seen)
+        const vertical = y => trees[y][this.x];
+        const horizontal = x => trees[this.y][x];
 
+        // Look north
+        this.updateDirection(this.y, 0, y => y >= 0, -1, vertical);
         // Look south
-        seen = 0;
-        if (this.y === trees.length - 1) {
-            this.visible = true;
-        } else {
-            for (let y = this.y + 1; y < trees.length; y++) {
-                if (trees[y][this.x].height < this.height) {
-                    seen++;
-                    if (y === trees.length - 1) {
-                        this.visible = true;
-                    }
-                } else {
-                    seen++;
-                    break;
-                }
-            }
-        }
-        this.visibleTrees.push(seen)
+        this.updateDirection(this.y, trees.length - 1, y => y < trees.length, 1, vertical);
 
         // Look west
-        seen = 0;
-        if (this.x === 0) {
-            this.visible = true;
-        } else {
-            for (let x = this.x - 1; x >= 0; x--) {
-                if (trees[this.y][x].height < this.height) {
-                    seen++;
-                    if (x === 0) {
-                        this.visible = true;
-                    }
-                } else {
-                    seen++;
-                    break;
-                }
-            }
-        }
-        this.visibleTrees.push(seen);
-
+        this.updateDirection(this.x, 0, x => x >= 0, -1, horizontal);
         // Look east
-        seen = 0;
-        if (this.x === trees[0].length - 1) {
-            this.visible = true;
-        } else {
-            for (let x = this.x + 1; x < trees[0].length; x++) {
-                if (trees[this.y][x].height < this.height) {
-                    seen++;
-                    if (x === trees[0].length - 1) {
-                        this.visible = true;
-                    }
-                } else {
-                    seen++;
-                    break;
-                }
-            }
-        }
-        this.visibleTrees.push(seen);
+        this.updateDirection(this.x, trees[0].length - 1, x => x < trees[0].length, 1, horizontal);
  
         this.scenicScore = this.visibleTrees.reduce((t, c) => t * c, 1);
+
+        return this.visible ? 1 : 0;
     }
 }
 
@@ -111,5 +70,5 @@ export function discover(input) {
         .map((l, y) => l.split('').map((t, x) => new Tree(x, y, Number(t))));
     let forest = new Forest(trees);
     forest.updateVisibility();
-    return forest.trees;
+    return forest;
 }

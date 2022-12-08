@@ -8,14 +8,12 @@ describe("treetop treehouse", () => {
     ].forEach(({ input, expected }) =>
         it(`sees visible trees in ${input}`, () => {
             let forest = discover(input);
-            let visible = 0;
-            for (let y = 0; y < forest.length; y++) {
-                visible += forest[y].reduce((s, c) => s + (c.visible ? 1 : 0), 0)
-                if (expected < 100) {
-                    console.log(forest[y].map(x => (x.visible ? '*' : 'o')).join(''));
+            if (expected < 100) {
+                for (let y = 0; y < forest.trees.length; y++) {
+                    console.log(forest.trees[y].map(x => (x.visible ? '*' : 'o')).join(''));
                 }
             }
-            expect(visible).to.equal(expected);
+            expect(forest.visibleTrees).to.equal(expected);
         }));
 
     [
@@ -25,9 +23,9 @@ describe("treetop treehouse", () => {
         it(`finds most scenic tree in ${input}`, () => {
             let forest = discover(input);
             let max = 0;
-            for (let y = 0; y < forest.length; y++) {
-                for(let x = 0; x < forest.length; x++) {
-                    const score = forest[y][x].scenicScore;
+            for (let y = 0; y < forest.trees.length; y++) {
+                for(let x = 0; x < forest.trees[0].length; x++) {
+                    const score = forest.trees[y][x].scenicScore;
                     if (score > max) {
                         max = score;
                     }
