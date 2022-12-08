@@ -9,9 +9,9 @@ describe("treetop treehouse", () => {
         it(`sees visible trees in ${input}`, () => {
             let forest = discover(input);
             if (expected < 100) {
-                for (let y = 0; y < forest.trees.length; y++) {
-                    console.log(forest.trees[y].map(x => (x.visible ? '*' : 'o')).join(''));
-                }
+                forest.trees.forEach(row =>
+                    console.log(row.map(x => (x.visible ? '*' : 'o')).join(''))
+                )
             }
             expect(forest.visibleTrees).to.equal(expected);
         }));
@@ -22,15 +22,13 @@ describe("treetop treehouse", () => {
     ].forEach(({ input, expected }) =>
         it(`finds most scenic tree in ${input}`, () => {
             let forest = discover(input);
-            let max = 0;
-            for (let y = 0; y < forest.trees.length; y++) {
-                for(let x = 0; x < forest.trees[0].length; x++) {
-                    const score = forest.trees[y][x].scenicScore;
-                    if (score > max) {
-                        max = score;
-                    }
-                }
-            }
+            let max = forest.trees.reduce((max, row) => 
+                row.reduce((max, tree) => 
+                    tree.scenicScore > max
+                        ? tree.scenicScore
+                        : max
+                , max)
+            , 0);
             expect(max).to.equal(expected);
         }));
 })
