@@ -28,7 +28,7 @@ jobs:
       - run: npm run test-output
 
       - name: Publish Test Results
-        uses: dorny/test-reporter@1
+        uses: dorny/test-reporter@v1
         if: success() || failure()
         with:
           name: Tests
