@@ -1,7 +1,9 @@
+import { asLines } from './../common/parsing.js';
+
 function getSums(data) {
-    let lines = data.replace('\r', '').split('\n');
+    let lines = asLines(data);
     let sums = lines.reduce((elves, line) => {
-        if (line.length === 1) {
+        if (line.length <= 1) {
             elves.push(0);
         } else {
             elves[elves.length - 1] += Number(line);
