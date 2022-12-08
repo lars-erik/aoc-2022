@@ -28,7 +28,7 @@ jobs:
       - run: npm run test-output
 
       - name: Publish Test Results
-        uses: actions/upload-artifact@
+        uses: dorny/test-reporter@1
         if: success() || failure()
         with:
           name: Tests
