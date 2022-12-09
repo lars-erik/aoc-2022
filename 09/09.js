@@ -7,38 +7,57 @@ const dirs = {
     D: {x:0,y:-1}
 }
 
-export function getTailVisits(data, log) {
+export function getTailVisits(data, ubound, log) {
     const lines = asLines(data).map(x => x.split(' '));
-    const h = {x:0,y:0};
-    const t = {x:0,y:0};
+    const r = [{x:0,y:0}];
     const visited = [[true]];
     let newPoints = 1;
 
+    for(let j = 0; j<ubound; j++) {
+        r.push({x:0, y:0});
+    }
+
     lines.forEach((l, i) => {
         let dir = dirs[l[0]];
+
+        let h = r[0];
+        
         for(let j = 0; j<l[1]; j++) {
+
+            // TODO: move h/n further, log ubound
+
             h.x += dir.x;
             h.y += dir.y;
+            let f = h;
 
-            let xDist = h.x-t.x;
-            let yDist = h.y-t.y;
+            for(let k = 1; k<=ubound; k++) {
+                let n = r[k];
+
+                let xDist = f.x-n.x;
+                let yDist = f.y-n.y;
+                
+                if (Math.abs(xDist) > 1 || Math.abs(yDist) > 1) {
+                    let xStep = Math.min(1, Math.max(xDist, -1));
+                    let yStep = Math.min(1, Math.max(yDist, -1));
             
-            if (Math.abs(xDist) > 1 || Math.abs(yDist) > 1) {
-                let xStep = Math.min(1, Math.max(xDist, -1));
-                let yStep = Math.min(1, Math.max(yDist, -1));
-        
-                t.x += xStep;
-                t.y += yStep;
+                    n.x += xStep;
+                    n.y += yStep;
 
-                let beenThere = (visited[t.y] || [])[t.x];
-                if (!beenThere) {
-                    visited[t.y] = visited[t.y] || [];
-                    visited[t.y][t.x] = true;
-                    newPoints++;
+                    if (k === ubound) {
+                        let beenThere = (visited[n.y] || [])[n.x];
+                        if (!beenThere) {
+                            visited[n.y] = visited[n.y] || [];
+                            visited[n.y][n.x] = true;
+                            newPoints++;
+                        }
+                    }
                 }
+
+                f = n;
+                n = r[k + 1];
             }
         }
     });
 
-    return {lines, h, t, newPoints};
+    return {lines, r, newPoints};
 }
