@@ -5,7 +5,7 @@ import { getTailVisits } from './09.js';
 describe.only('rope bridge', () => {
     [
         {input:'sample', expected: 13},
-        {input:'input', expected: 0}
+        {input:'input', expected: 6391}
     ].forEach(({input, expected}) => 
         it(`counds tail points in ${input}`, () => {
             let data = getData(import.meta, input);
