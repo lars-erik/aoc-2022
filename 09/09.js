@@ -7,10 +7,12 @@ const dirs = {
     D: {x:0,y:-1}
 }
 
-export function getTailVisits(data) {
+export function getTailVisits(data, log) {
     const lines = asLines(data).map(x => x.split(' '));
     const h = {x:0,y:0};
     const t = {x:0,y:0};
+    const visited = [[true]];
+    let newPoints = 1;
 
     lines.forEach((l, i) => {
         let dir = dirs[l[0]];
@@ -21,16 +23,22 @@ export function getTailVisits(data) {
             let xDist = h.x-t.x;
             let yDist = h.y-t.y;
             
-            let xStep = xDist > 1 ? xDist - 1 : xDist < -1 ? xDist + 1 : 0;
-            let yStep = yDist > 1 ? yDist - 1 : yDist < -1 ? yDist + 1 : 0;
+            if (Math.abs(xDist) > 1 || Math.abs(yDist) > 1) {
+                let xStep = Math.min(1, Math.max(xDist, -1));
+                let yStep = Math.min(1, Math.max(yDist, -1));
+        
+                t.x += xStep;
+                t.y += yStep;
 
-            t.x += xStep;
-            t.y += yStep;
-
-            console.log(i, j, h, t);
+                let beenThere = (visited[t.y] || [])[t.x];
+                if (!beenThere) {
+                    visited[t.y] = visited[t.y] || [];
+                    visited[t.y][t.x] = true;
+                    newPoints++;
+                }
+            }
         }
-
     });
 
-    return {lines, h, t};
+    return {lines, h, t, newPoints};
 }
