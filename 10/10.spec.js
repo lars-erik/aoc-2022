@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { getData } from './../common/input.js';
 import Cpu from './10.js';
 
-describe.only("communicator cpu", () => {
+describe("communicator cpu", () => {
     [
         {input:'simple', expected: -1},
         {input:'sample', expected: 13140},
