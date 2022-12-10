@@ -38,6 +38,8 @@ export default class {
     clock = 0;
     instruction = 0;
     x = 1;
+    screen = '';
+    sprite = 0;
 
     constructor(data) {
         this.program = parse(data);
@@ -45,12 +47,25 @@ export default class {
     }
 
     update() {
+        this.sprite = this.x - 1;
+
+        let pixel = this.clock % 40;
+        if (pixel == 0 && this.clock > 0) {
+            this.screen += '\n';
+        }
+        if (pixel >= this.sprite && pixel <= this.sprite + 2) {
+            this.screen += '#';
+        } else {
+            this.screen += '.';
+        }
+
         this.clock++;
         let timeLeft = this.current.execute(this);
         if (timeLeft === 0) {
             this.instruction++;
             this.current = this.program[this.instruction];
         }
+
         return this.current !== undefined;
     }
 }

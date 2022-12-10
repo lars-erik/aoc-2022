@@ -6,7 +6,7 @@ describe.only("communicator cpu", () => {
     [
         {input:'simple', expected: -1},
         {input:'sample', expected: 13140},
-        {input:'input', expected: 0},
+        {input:'input', expected: 13520},
     ].forEach(({input, expected}) => {
         it(`calculates signal strength for ${input}`, () =>{
             let data = getData(import.meta, input);
@@ -15,18 +15,43 @@ describe.only("communicator cpu", () => {
             while(cpu.update()) {
                 if ((cpu.clock - 19) % 40 === 0) {
                     strength += (cpu.clock + 1) * cpu.x;
-                    console.log(cpu.clock, cpu.x, strength);
                 }
-                //console.log(cpu.clock, cpu.x);
             }
-            console.log();
-            console.log(cpu.clock, cpu.x);
 
             if (cpu.clock < 10) {
                 expect(cpu.x).to.equal(expected);
             } else {
                 expect(strength).to.equal(expected);
             }
+        });
+    });
+
+    [
+        {input:'sample', expected: `
+##..##..##..##..##..##..##..##..##..##..
+###...###...###...###...###...###...###.
+####....####....####....####....####....
+#####.....#####.....#####.....#####.....
+######......######......######......####
+#######.......#######.......#######.....`},
+        {input:'input', expected: 
+`
+###...##..###..#..#.###..####..##..###..
+#..#.#..#.#..#.#..#.#..#.#....#..#.#..#.
+#..#.#....#..#.####.###..###..#..#.###..
+###..#.##.###..#..#.#..#.#....####.#..#.
+#....#..#.#....#..#.#..#.#....#..#.#..#.
+#.....###.#....#..#.###..####.#..#.###..`},
+    ].forEach(({input, expected}) => {
+        it(`renders output on screen for ${input}`, () =>{
+            let data = getData(import.meta, input);
+            let cpu = new Cpu(data);
+            while(cpu.update()) {
+            }
+            expected = expected.replace(/\r/g, '').trim();
+            console.log(cpu.screen);
+
+            expect(cpu.screen).to.equal(expected);
         });
     });
 })
