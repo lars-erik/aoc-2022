@@ -9,7 +9,7 @@ class Monkey {
     }
 }
 
-export function monkeyBusiness(data, rounds = 20) {
+export function monkeyBusiness(data, rounds, worryDivisor) {
     let lines = asLines(data);
     let monkey = null;
     let monkeys = [];
@@ -28,8 +28,16 @@ export function monkeyBusiness(data, rounds = 20) {
                 case 'Operation':
                     monkey.op = (old) => {
                         let adj = 0;
-                        eval(pair[1].trim().replace('new', 'adj'));
-                        adj = Math.floor(adj / 3);
+                        let ops = pair[1].trim().split(' ').slice(3);
+                        if (ops[1] === 'old') {
+                            ops[1] = old;
+                        }
+                        if (ops[0] == "*") {
+                            adj = old * Number(ops[1]);
+                        } else {
+                            adj = old + Number(ops[1]);
+                        }
+                        adj = Math.floor(adj / worryDivisor);
                         return adj;
                     }
                     break;
@@ -66,8 +74,9 @@ export function monkeyBusiness(data, rounds = 20) {
             }
             monkey.items = [];
         }
-        console.log(round + 1, monkeys.map(x => x.id + ' ' + x.inspections + ' ' + x.items));
-
+        if (round < 50) {
+            console.log(round + 1, monkeys.map(x => x.id + ' ' + x.inspections + ' ' + x.items));
+        }
     }
  
     let mostActive = monkeys.sort((a, b) => b.inspections - a.inspections).slice(0, 2);
