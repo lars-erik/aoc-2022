@@ -38,6 +38,9 @@ export function monkeyBusiness(data, rounds, worryDivisor) {
                             adj = old + Number(ops[1]);
                         }
                         adj = Math.floor(adj / worryDivisor);
+                        if (worryDivisor === 1) {
+                            adj %= 9_699_690;
+                        }
                         return adj;
                     }
                     break;
@@ -57,7 +60,7 @@ export function monkeyBusiness(data, rounds, worryDivisor) {
         }
     }
 
-    let maxRounds = 20;
+    let maxRounds = 10000;
     for(let round = 0; round<Math.min(maxRounds, rounds); round++) {
         for(let m = 0; m<monkeys.length; m++) {
             let monkey = monkeys[m];
@@ -74,14 +77,19 @@ export function monkeyBusiness(data, rounds, worryDivisor) {
             }
             monkey.items = [];
         }
+
+        /*
         if (round < 50) {
             console.log(round + 1, monkeys.map(x => x.id + ' ' + x.inspections + ' ' + x.items));
         }
+        */
     }
  
     let mostActive = monkeys.sort((a, b) => b.inspections - a.inspections).slice(0, 2);
 
+    /*
     console.log(mostActive);
+    */
 
     return mostActive.reduce((p, m) => p * m.inspections, 1);
 }
