@@ -13,8 +13,25 @@ function parse(data) {
     return pairs;
 }
 
-function compare({a, b}) {
-    return 0;
+function compareItem({a, b}) {
+    if (typeof(a) === 'number' && typeof(b) === 'number') {
+        return a < b ? -1 : b < a ? 1 : 0;
+    }
+    if (typeof(a) === 'number') a = [a];
+    if (typeof(b) === 'number') b = [b];
+    return compareArray({a, b});
+}
+
+function compareArray({a, b}) {
+    for(let i = 0; i<Math.min(a.length, b.length); i++) {
+        const subPair = { a: a[i], b: b[i] };
+        let current = compareItem(subPair);
+        //console.log(subPair, current);
+        if (current !== 0) {
+            return current;
+        }
+    }
+    return compareItem({a:a.length, b:b.length});
 }
 
 export function findCorrectIndices(data) {
@@ -22,12 +39,13 @@ export function findCorrectIndices(data) {
     let correct = [];
     for(let i = 0; i<pairs.length; i++) {
         let pair = pairs[i];
-        let comparison = compare(pair);
+        let comparison = compareArray(pair);
         if (comparison < 1) {
             correct.push(i);
         }
     }
-    console.log(pairs);
+    //console.log(pairs.map(JSON.stringify));
+    //console.log(correct);
 
-    return correct.reduce((s, c) => s + c, 0);
+    return correct.reduce((s, c) => s + c + 1, 0);
 }
