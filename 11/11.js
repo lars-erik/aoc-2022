@@ -39,6 +39,7 @@ export function monkeyBusiness(data, rounds, worryDivisor) {
                         }
                         adj = Math.floor(adj / worryDivisor);
                         if (worryDivisor === 1) {
+                            // TODO: Calculate based on divisors in tests!! (not the same primes)
                             adj %= 9_699_690;
                         }
                         return adj;
