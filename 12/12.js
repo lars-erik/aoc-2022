@@ -11,7 +11,7 @@ function neighbours(matrix, pos) {
     return them;
 }
 
-export function findSteps(data) {
+export function findSteps(data, startY = -1) {
     let start, end;
     let matrix = asLines(data)
         .map((l, y) => l
@@ -19,12 +19,17 @@ export function findSteps(data) {
             .map((c, x) => {
                 let val = {x, y};
                 if (c === "S") {
-                    start = val;
+                    if (startY === -1) {
+                        start = val;
+                    }
                     c = "a";
                 }
                 if (c === "E") {
                     end = val;
                     c = "z";
+                }
+                if (x === 0 && startY === y) {
+                    start = val;
                 }
                 val.h = c.charCodeAt(0) - a;
                 if (val !== start) {
@@ -78,7 +83,7 @@ export function findSteps(data) {
 
     ways.sort((a, b) => a.d - b.d);
     let best = ways[0];
-    console.log('best', best);
+    //console.log('best', best);
 
     return best.d;
 }
