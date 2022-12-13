@@ -19,10 +19,10 @@ function compareItem({a, b}) {
     }
     if (typeof(a) === 'number') a = [a];
     if (typeof(b) === 'number') b = [b];
-    return compareArray({a, b});
+    return compareArray(a, b);
 }
 
-function compareArray({a, b}) {
+export function compareArray(a, b) {
     for(let i = 0; i<Math.min(a.length, b.length); i++) {
         const subPair = { a: a[i], b: b[i] };
         let current = compareItem(subPair);
@@ -39,7 +39,7 @@ export function findCorrectIndices(data) {
     let correct = [];
     for(let i = 0; i<pairs.length; i++) {
         let pair = pairs[i];
-        let comparison = compareArray(pair);
+        let comparison = compareArray(pair.a, pair.b);
         if (comparison < 1) {
             correct.push(i);
         }
@@ -48,4 +48,17 @@ export function findCorrectIndices(data) {
     //console.log(correct);
 
     return correct.reduce((s, c) => s + c + 1, 0);
+}
+
+export function findDecoderKey(data) {
+    const two = [[2]];
+    const six = [[6]];
+    let packets = parse(data)
+        .reduce((all, c) => all.concat([c.a, c.b]), [])
+        .concat([two, six]);
+    packets.sort((a, b) => compareArray(a, b));
+    console.log(packets);
+    let indexOfTwo = packets.indexOf(two) + 1;
+    let indexOfSix = packets.indexOf(six) + 1;
+    return indexOfTwo * indexOfSix;
 }
