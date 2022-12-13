@@ -57,7 +57,6 @@ export function findDecoderKey(data) {
         .reduce((all, c) => all.concat([c.a, c.b]), [])
         .concat([two, six]);
     packets.sort((a, b) => compareArray(a, b));
-    console.log(packets);
     let indexOfTwo = packets.indexOf(two) + 1;
     let indexOfSix = packets.indexOf(six) + 1;
     return indexOfTwo * indexOfSix;
