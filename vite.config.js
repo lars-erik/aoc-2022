@@ -12,7 +12,8 @@ export default defineConfig({
             formats: ['es'],
             entry: {
                 d04: './04/viz/index.html',
-                d08: './08/viz/index.html'
+                d08: './08/viz/index.html',
+                d14: './14/viz/index.html',
             }
         }
     }

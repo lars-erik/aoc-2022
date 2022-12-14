@@ -19,6 +19,7 @@ export function parse(data, addFloor) {
         });
 
     let map = [];
+    let rockCoords = [];
     for (let l = 0; l < lines.length; l++) {
         for (let ci = 0; ci < lines[l].length - 1; ci++) {
             let a = lines[l][ci];
@@ -27,6 +28,7 @@ export function parse(data, addFloor) {
                 for (let x = Math.min(a[0], b[0]); x <= Math.max(a[0], b[0]); x++) {
                     map[y] = map[y] || [];
                     map[y][x] = '#';
+                    rockCoords.push([x, y]);
                 }
             }
         }
@@ -38,11 +40,13 @@ export function parse(data, addFloor) {
         map[maxY] = [];
         for (let x = minX - 500; x <= maxX + 500; x++) {
             map[maxY][x] = '#';
+            rockCoords.push([x, maxY]);
         }
     }
 
     return {
         cave: map,
+        rockCoords,
         bounding: {
             minY,
             maxY,
@@ -52,54 +56,67 @@ export function parse(data, addFloor) {
     };
 }
 
-export function fillSand(complex, max = 100) {
-    let i = 0;
-    let map = complex.cave;
-    let resting = [];
-    let withinBounds = true;
-    if (!map[0]) map[0] = [];
-    while (i++ < max && withinBounds) {
-        let grain = [500, 0];
-        for (let y = 1; y <= complex.bounding.maxY; y++) {
-            if (!map[y]) map[y] = [];
+export class Simulation {
+    i = 0; // Grain index
+    resting = [];
+    done = false;
+    grain = [500, 0];
 
-            if (!map[y][grain[0]]) {
-                grain[1] = y;
-                continue;
-            }
-
-            if (!map[y][grain[0] - 1]) {
-                grain = [grain[0] - 1, y];
-                continue;
-            }
-
-            if (!map[y][grain[0] + 1]) {
-                grain = [grain[0] + 1, y];
-                continue;
-            }
-
-            if (map[y][grain[0]] &&
-                map[y][grain[0] - 1] &&
-                map[y][grain[0] + 1]) {
-                map[grain[1]][grain[0]] = 'o';
-                resting.push(grain);
-                if (grain[1] === 0 && grain[0] === 500) {
-                    withinBounds = false;
-                    break;
-                }
-
-                grain = [500, 0];
-                break;
-            }
-
-
-            withinBounds = false;
-            break;
-        }
-
+    constructor(complex, maxIter = 100) {
+        this.complex = complex;
+        this.maxIter = maxIter;
+        this.map = complex.cave;
+        if (!this.map[0]) this.map[0] = [];
     }
 
-    console.log(i);
-    complex.resting = resting;
-    return complex;
+    update() {
+        let moreToDo = this.i++ < this.maxIter && !this.done;
+        if (!moreToDo) return false;
+
+        const map = this.map;
+        let grain = this.grain;
+        let y = grain[1] + 1;
+        if (!map[y]) map[y] = [];
+
+        if (!map[y][grain[0]]) {
+            grain[1] = y;
+            return true;
+        }
+
+        if (!map[y][grain[0] - 1]) {
+            grain[1] = y;
+            grain[0] = grain[0] - 1;
+            return true;
+        }
+
+        if (!map[y][grain[0] + 1]) {
+            grain[1] = y;
+            grain[0] = grain[0] + 1;
+            return true;
+        }
+
+        if (map[y][grain[0]] &&
+            map[y][grain[0] - 1] &&
+            map[y][grain[0] + 1]) {
+            map[grain[1]][grain[0]] = 'o';
+            this.resting.push(grain);
+            if (grain[1] === 0 && grain[0] === 500) {
+                this.done = true;
+                return false;
+            }
+
+            this.grain = [500, 0];
+            return true;
+        }
+
+        this.done = true;
+        return false;
+    }
+}
+
+export function fillSand(complex, maxIter = 100) {
+    let j = -10;
+    let sim = new Simulation(complex, maxIter);
+    while(sim.update() && j++ < maxIter) {}
+    return sim;
 }

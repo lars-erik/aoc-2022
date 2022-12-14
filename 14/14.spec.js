@@ -2,7 +2,7 @@ import { getData } from './../common/input.js';
 import { parse, fillSand } from './14.js';
 import { expect } from 'chai';
 
-describe('regolith reservoar', () => {
+describe.only('regolith reservoar', () => {
     [
         {input:'sample', expected: 24},
         {input:'input', expected: 638},
@@ -18,11 +18,12 @@ describe('regolith reservoar', () => {
         });
 
         it(`fills sand in ${input}`, () => {
-            let complex = fillSand(parse(data), 10000);
-            logMap(complex);
-            expect(complex.resting.length).to.equal(expected);
+            let sim = fillSand(parse(data), 100000);
+            logMap(sim.complex);
+            expect(sim.resting.length).to.equal(expected);
         });
     });
+
     [
         {input:'sample', expected: 93},
         {input:'input', expected: 31722},
@@ -38,9 +39,9 @@ describe('regolith reservoar', () => {
         });
 
         it(`fills sand in ${input} with floor`, () => {
-            let complex = fillSand(parse(data, true), 50000);
-            logMap(complex, 40);
-            expect(complex.resting.length).to.equal(expected);
+            let sim = fillSand(parse(data, true), 5000000);
+            logMap(sim.complex, 40);
+            expect(sim.resting.length).to.equal(expected);
         });
     });
     
