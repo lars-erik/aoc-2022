@@ -21,7 +21,7 @@ import {
     MeshBasicMaterial,
     MeshLambertMaterial,
     ShaderMaterial,
-    
+
     Object3D,
     Texture,
     BackSide,
@@ -44,43 +44,44 @@ function resize() {
     renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
-const speed = 100000;
 const tickTime = 1;
+let speed = 20;
 let prevTick = -tickTime;
 function animate() {
-    const elapsed = clock.getElapsedTime() * speed;
-    let t = Math.floor(elapsed);
-    let ft = elapsed - t;
-    let tick = (elapsed - prevTick) >= tickTime;
-    let ticks = Math.max(1, Math.floor(elapsed - prevTick));
+    if (!sim.done) {
 
-    if (tick) {
-        prevTick = t;
+        const elapsed = clock.getElapsedTime() * speed;
+        let t = Math.floor(elapsed);
+        let ft = elapsed - t;
+        let tick = (elapsed - prevTick) >= tickTime;
+        let ticks = Math.max(1, t - prevTick);
 
-        if (sim.grain[0] === 500 && sim.grain[1] === 0) {
-            if (grain && prevTo) {
-                console.log(`leaving ${grain} at ${prevTo.toArray()}`)
-                grain.position.copy(prevTo);
+        if (tick) {
+            speed = Math.pow(speed, 1.001);
+
+            for (let j = 0; j < ticks; j++) {
+                if (sim.grain[0] === 500 && sim.grain[1] === 0) {
+                    if (grain && prevTo) {
+                        grain.position.copy(prevTo);
+                    }
+
+                    grain = new Mesh(boxGeo, sandMat);
+                    grain.position.x = 500;
+                    scene.add(grain);
+                }
+
+                from = new Vector3(sim.grain[0], -sim.grain[1], 0);
+                prevTo = to;
+                sim.update();
+                to = new Vector3(sim.grain[0], -sim.grain[1], 0);
             }
 
-            grain = new Mesh(boxGeo, sandMat);
-            grain.position.x = 500;
-            scene.add(grain);
+            prevTick = t;
         }
 
-        from = new Vector3(sim.grain[0], -sim.grain[1], 0);
-        for(let j = 0; j<ticks; j++) {
-            prevTo = to;
-            sim.update();
-            if (sim.grain[0] === 500 && sim.grain[1] === 0) {
-                break;
-            }
-            to = new Vector3(sim.grain[0], -sim.grain[1], 0);
-        }
+        grain.position.lerpVectors(from, to, ft);
     }
-    
-    grain.position.lerpVectors(from, to, ft);
-    
+
     if (enableControls) {
         controls.update();
     }
@@ -90,7 +91,7 @@ function animate() {
     stats.update();
 }
 
-let grain = null, 
+let grain = null,
     from = null,
     to = null,
     prevTo = null;
@@ -98,39 +99,46 @@ let grain = null,
 const complex = parse(data, true);
 const sim = new Simulation(complex, 5_000_000);
 
-const enableControls = false;
+const enableControls = true;
 
 const container = document.querySelector("#scene");
 const stats = new Stats();
-container.appendChild( stats.dom );
+container.appendChild(stats.dom);
 
 const clock = new Clock();
 const scene = new Scene();
-const focusPoint = new Vector3(500, complex.bounding.maxY/-2, 0);
+const focusPoint = new Vector3(500, complex.bounding.maxY / -2, 0);
 
 const renderer = new WebGLRenderer();
-const camera = new PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.x = focusPoint.x;
 camera.position.z = 210;
 camera.position.y = focusPoint.y;
 camera.lookAt(focusPoint);
 
-const controls = null;
+let controls = null;
 if (enableControls) {
-    controls = new OrbitControls ( camera, renderer.domElement );
+    controls = new OrbitControls(camera, renderer.domElement);
     controls.target = focusPoint;
 }
-const dirLight = new DirectionalLight( 0xf0f0f0, 1 );
-dirLight.position.x = 5;
-dirLight.position.z = 7;
-dirLight.position.y = 1;
-scene.add(dirLight);
 
-const rockMat = new MeshLambertMaterial( {color: 0x808a80} );
-const sandMat = new MeshLambertMaterial( {color: 0xe0ff0a} );
-const boxGeo = new BoxGeometry( 1, 1, 1 );
+const dirLightA = new DirectionalLight(0xf0f0f0, .9);
+dirLightA.position.x = 5;
+dirLightA.position.z = 7;
+dirLightA.position.y = 1;
+scene.add(dirLightA);
 
-for(let i = 0; i<complex.rockCoords.length; i++) {
+const dirLightB = new DirectionalLight(0xe0e0e0, .7);
+dirLightB.position.x = -5;
+dirLightB.position.z = -5;
+dirLightB.position.y = 10;
+scene.add(dirLightB);
+
+const rockMat = new MeshLambertMaterial({ color: 0x808a80 });
+const sandMat = new MeshLambertMaterial({ color: 0xe0ff0a });
+const boxGeo = new BoxGeometry(1.01, 1.01, 1.01);
+
+for (let i = 0; i < complex.rockCoords.length; i++) {
     let box = new Mesh(boxGeo, rockMat);
     box.position.x = complex.rockCoords[i][0];
     box.position.y = -complex.rockCoords[i][1];
