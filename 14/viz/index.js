@@ -44,7 +44,7 @@ function resize() {
     renderer.setSize(container.clientWidth, container.clientHeight);
 }
 
-const speed = 4000;
+const speed = 100000;
 const tickTime = 1;
 let prevTick = -tickTime;
 function animate() {
