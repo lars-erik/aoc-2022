@@ -174,7 +174,7 @@ class K {
 function G() {
   z.setSize(k.clientWidth, k.clientHeight);
 }
-const O = 4e3, V = 1;
+const O = 1e5, V = 1;
 let v = -V;
 function X() {
   const o = q.getElapsedTime() * O;
