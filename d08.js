@@ -1,29 +1,30 @@
-import { E as n4, c as D, d as I, T as N, Q as O5, e as A5, f as S, a as o4, g as Z, h as W, S as a4, W as i4, i as s4, j as o5, F as r4, A as c4, H as l4, k as h4, P as d4, l as u4, M as v, m as p4, b as f4, B as m4, C as b4, n as I5 } from "./parsing.1b372607.js";
-const L5 = { type: "change" }, n5 = { type: "start" }, D5 = { type: "end" };
-class y4 extends n4 {
-  constructor(o, s) {
-    super(), this.object = o, this.domElement = s, this.domElement.style.touchAction = "none", this.enabled = !0, this.target = new D(), this.minDistance = 0, this.maxDistance = 1 / 0, this.minZoom = 0, this.maxZoom = 1 / 0, this.minPolarAngle = 0, this.maxPolarAngle = Math.PI, this.minAzimuthAngle = -1 / 0, this.maxAzimuthAngle = 1 / 0, this.enableDamping = !1, this.dampingFactor = 0.05, this.enableZoom = !0, this.zoomSpeed = 1, this.enableRotate = !0, this.rotateSpeed = 1, this.enablePan = !0, this.panSpeed = 1, this.screenSpacePanning = !0, this.keyPanSpeed = 7, this.autoRotate = !1, this.autoRotateSpeed = 2, this.keys = { LEFT: "ArrowLeft", UP: "ArrowUp", RIGHT: "ArrowRight", BOTTOM: "ArrowDown" }, this.mouseButtons = { LEFT: I.ROTATE, MIDDLE: I.DOLLY, RIGHT: I.PAN }, this.touches = { ONE: N.ROTATE, TWO: N.DOLLY_PAN }, this.target0 = this.target.clone(), this.position0 = this.object.position.clone(), this.zoom0 = this.object.zoom, this._domElementKeyEvents = null, this.getPolarAngle = function() {
-      return r.phi;
+import { E as t4, c as P, d as j, T as I, Q as S5, e as x5, f as b, a as n4, g as X, h as G, S as o4, W as a4, i as i4, j as n5, F as s4, A as r4, H as c4, k as l4, P as h4, l as u4, M as R, m as d4, b as p4, B as f4, C as m4, n as j5 } from "./parsing.8b6b88a7.js";
+import { S as b4 } from "./stats.module.6d20f080.js";
+const L5 = { type: "change" }, t5 = { type: "start" }, A5 = { type: "end" };
+class g4 extends t4 {
+  constructor(a, r) {
+    super(), this.object = a, this.domElement = r, this.domElement.style.touchAction = "none", this.enabled = !0, this.target = new P(), this.minDistance = 0, this.maxDistance = 1 / 0, this.minZoom = 0, this.maxZoom = 1 / 0, this.minPolarAngle = 0, this.maxPolarAngle = Math.PI, this.minAzimuthAngle = -1 / 0, this.maxAzimuthAngle = 1 / 0, this.enableDamping = !1, this.dampingFactor = 0.05, this.enableZoom = !0, this.zoomSpeed = 1, this.enableRotate = !0, this.rotateSpeed = 1, this.enablePan = !0, this.panSpeed = 1, this.screenSpacePanning = !0, this.keyPanSpeed = 7, this.autoRotate = !1, this.autoRotateSpeed = 2, this.keys = { LEFT: "ArrowLeft", UP: "ArrowUp", RIGHT: "ArrowRight", BOTTOM: "ArrowDown" }, this.mouseButtons = { LEFT: j.ROTATE, MIDDLE: j.DOLLY, RIGHT: j.PAN }, this.touches = { ONE: I.ROTATE, TWO: I.DOLLY_PAN }, this.target0 = this.target.clone(), this.position0 = this.object.position.clone(), this.zoom0 = this.object.zoom, this._domElementKeyEvents = null, this.getPolarAngle = function() {
+      return s.phi;
     }, this.getAzimuthalAngle = function() {
-      return r.theta;
+      return s.theta;
     }, this.getDistance = function() {
       return this.object.position.distanceTo(this.target);
     }, this.listenToKeyEvents = function(t) {
-      t.addEventListener("keydown", P5), this._domElementKeyEvents = t;
+      t.addEventListener("keydown", w5), this._domElementKeyEvents = t;
     }, this.saveState = function() {
       e.target0.copy(e.target), e.position0.copy(e.object.position), e.zoom0 = e.object.zoom;
     }, this.reset = function() {
       e.target.copy(e.target0), e.object.position.copy(e.position0), e.object.zoom = e.zoom0, e.object.updateProjectionMatrix(), e.dispatchEvent(L5), e.update(), i = n.NONE;
     }, this.update = function() {
-      const t = new D(), a = new O5().setFromUnitVectors(o.up, new D(0, 1, 0)), m = a.clone().invert(), b = new D(), x = new O5(), H = 2 * Math.PI;
+      const t = new P(), o = new S5().setFromUnitVectors(a.up, new P(0, 1, 0)), h = o.clone().invert(), u = new P(), m = new S5(), N = 2 * Math.PI;
       return function() {
-        const S5 = e.object.position;
-        t.copy(S5).sub(e.target), t.applyQuaternion(a), r.setFromVector3(t), e.autoRotate && i === n.NONE && C(_5()), e.enableDamping ? (r.theta += p.theta * e.dampingFactor, r.phi += p.phi * e.dampingFactor) : (r.theta += p.theta, r.phi += p.phi);
-        let O = e.minAzimuthAngle, A = e.maxAzimuthAngle;
-        return isFinite(O) && isFinite(A) && (O < -Math.PI ? O += H : O > Math.PI && (O -= H), A < -Math.PI ? A += H : A > Math.PI && (A -= H), O <= A ? r.theta = Math.max(O, Math.min(A, r.theta)) : r.theta = r.theta > (O + A) / 2 ? Math.max(O, r.theta) : Math.min(A, r.theta)), r.phi = Math.max(e.minPolarAngle, Math.min(e.maxPolarAngle, r.phi)), r.makeSafe(), r.radius *= y, r.radius = Math.max(e.minDistance, Math.min(e.maxDistance, r.radius)), e.enableDamping === !0 ? e.target.addScaledVector(d, e.dampingFactor) : e.target.add(d), t.setFromSpherical(r), t.applyQuaternion(m), S5.copy(e.target).add(t), e.object.lookAt(e.target), e.enableDamping === !0 ? (p.theta *= 1 - e.dampingFactor, p.phi *= 1 - e.dampingFactor, d.multiplyScalar(1 - e.dampingFactor)) : (p.set(0, 0, 0), d.set(0, 0, 0)), y = 1, f || b.distanceToSquared(e.object.position) > c || 8 * (1 - x.dot(e.object.quaternion)) > c ? (e.dispatchEvent(L5), b.copy(e.object.position), x.copy(e.object.quaternion), f = !1, !0) : !1;
+        const O5 = e.object.position;
+        t.copy(O5).sub(e.target), t.applyQuaternion(o), s.setFromVector3(t), e.autoRotate && i === n.NONE && H(v5()), e.enableDamping ? (s.theta += p.theta * e.dampingFactor, s.phi += p.phi * e.dampingFactor) : (s.theta += p.theta, s.phi += p.phi);
+        let E = e.minAzimuthAngle, w = e.maxAzimuthAngle;
+        return isFinite(E) && isFinite(w) && (E < -Math.PI ? E += N : E > Math.PI && (E -= N), w < -Math.PI ? w += N : w > Math.PI && (w -= N), E <= w ? s.theta = Math.max(E, Math.min(w, s.theta)) : s.theta = s.theta > (E + w) / 2 ? Math.max(E, s.theta) : Math.min(w, s.theta)), s.phi = Math.max(e.minPolarAngle, Math.min(e.maxPolarAngle, s.phi)), s.makeSafe(), s.radius *= g, s.radius = Math.max(e.minDistance, Math.min(e.maxDistance, s.radius)), e.enableDamping === !0 ? e.target.addScaledVector(y, e.dampingFactor) : e.target.add(y), t.setFromSpherical(s), t.applyQuaternion(h), O5.copy(e.target).add(t), e.object.lookAt(e.target), e.enableDamping === !0 ? (p.theta *= 1 - e.dampingFactor, p.phi *= 1 - e.dampingFactor, y.multiplyScalar(1 - e.dampingFactor)) : (p.set(0, 0, 0), y.set(0, 0, 0)), g = 1, _ || u.distanceToSquared(e.object.position) > d || 8 * (1 - m.dot(e.object.quaternion)) > d ? (e.dispatchEvent(L5), u.copy(e.object.position), m.copy(e.object.quaternion), _ = !1, !0) : !1;
       };
     }(), this.dispose = function() {
-      e.domElement.removeEventListener("contextmenu", T5), e.domElement.removeEventListener("pointerdown", g5), e.domElement.removeEventListener("pointercancel", E5), e.domElement.removeEventListener("wheel", w5), e.domElement.removeEventListener("pointermove", $), e.domElement.removeEventListener("pointerup", e5), e._domElementKeyEvents !== null && e._domElementKeyEvents.removeEventListener("keydown", P5);
+      e.domElement.removeEventListener("contextmenu", P5), e.domElement.removeEventListener("pointerdown", g5), e.domElement.removeEventListener("pointercancel", y5), e.domElement.removeEventListener("wheel", E5), e.domElement.removeEventListener("pointermove", J), e.domElement.removeEventListener("pointerup", $), e._domElementKeyEvents !== null && e._domElementKeyEvents.removeEventListener("keydown", w5);
     };
     const e = this, n = {
       NONE: -1,
@@ -36,247 +37,247 @@ class y4 extends n4 {
       TOUCH_DOLLY_ROTATE: 6
     };
     let i = n.NONE;
-    const c = 1e-6, r = new A5(), p = new A5();
-    let y = 1;
-    const d = new D();
-    let f = !1;
-    const g = new S(), E = new S(), P = new S(), w = new S(), h = new S(), M = new S(), L = new S(), k = new S(), j = new S(), l = [], F = {};
-    function _5() {
+    const d = 1e-6, s = new x5(), p = new x5();
+    let g = 1;
+    const y = new P();
+    let _ = !1;
+    const M = new b(), T = new b(), x = new b(), O = new b(), S = new b(), L = new b(), A = new b(), D = new b(), C = new b(), c = [], K = {};
+    function v5() {
       return 2 * Math.PI / 60 / 60 * e.autoRotateSpeed;
     }
-    function X() {
+    function F() {
       return Math.pow(0.95, e.zoomSpeed);
     }
-    function C(t) {
+    function H(t) {
       p.theta -= t;
     }
-    function G(t) {
+    function U(t) {
       p.phi -= t;
     }
-    const r5 = function() {
-      const t = new D();
-      return function(m, b) {
-        t.setFromMatrixColumn(b, 0), t.multiplyScalar(-m), d.add(t);
+    const s5 = function() {
+      const t = new P();
+      return function(h, u) {
+        t.setFromMatrixColumn(u, 0), t.multiplyScalar(-h), y.add(t);
       };
-    }(), c5 = function() {
-      const t = new D();
-      return function(m, b) {
-        e.screenSpacePanning === !0 ? t.setFromMatrixColumn(b, 1) : (t.setFromMatrixColumn(b, 0), t.crossVectors(e.object.up, t)), t.multiplyScalar(m), d.add(t);
+    }(), r5 = function() {
+      const t = new P();
+      return function(h, u) {
+        e.screenSpacePanning === !0 ? t.setFromMatrixColumn(u, 1) : (t.setFromMatrixColumn(u, 0), t.crossVectors(e.object.up, t)), t.multiplyScalar(h), y.add(t);
       };
-    }(), R = function() {
-      const t = new D();
-      return function(m, b) {
-        const x = e.domElement;
+    }(), k = function() {
+      const t = new P();
+      return function(h, u) {
+        const m = e.domElement;
         if (e.object.isPerspectiveCamera) {
-          const H = e.object.position;
-          t.copy(H).sub(e.target);
-          let U = t.length();
-          U *= Math.tan(e.object.fov / 2 * Math.PI / 180), r5(2 * m * U / x.clientHeight, e.object.matrix), c5(2 * b * U / x.clientHeight, e.object.matrix);
+          const N = e.object.position;
+          t.copy(N).sub(e.target);
+          let Z = t.length();
+          Z *= Math.tan(e.object.fov / 2 * Math.PI / 180), s5(2 * h * Z / m.clientHeight, e.object.matrix), r5(2 * u * Z / m.clientHeight, e.object.matrix);
         } else
-          e.object.isOrthographicCamera ? (r5(m * (e.object.right - e.object.left) / e.object.zoom / x.clientWidth, e.object.matrix), c5(b * (e.object.top - e.object.bottom) / e.object.zoom / x.clientHeight, e.object.matrix)) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."), e.enablePan = !1);
+          e.object.isOrthographicCamera ? (s5(h * (e.object.right - e.object.left) / e.object.zoom / m.clientWidth, e.object.matrix), r5(u * (e.object.top - e.object.bottom) / e.object.zoom / m.clientHeight, e.object.matrix)) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."), e.enablePan = !1);
       };
     }();
-    function J(t) {
-      e.object.isPerspectiveCamera ? y /= t : e.object.isOrthographicCamera ? (e.object.zoom = Math.max(e.minZoom, Math.min(e.maxZoom, e.object.zoom * t)), e.object.updateProjectionMatrix(), f = !0) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."), e.enableZoom = !1);
+    function Q(t) {
+      e.object.isPerspectiveCamera ? g /= t : e.object.isOrthographicCamera ? (e.object.zoom = Math.max(e.minZoom, Math.min(e.maxZoom, e.object.zoom * t)), e.object.updateProjectionMatrix(), _ = !0) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."), e.enableZoom = !1);
+    }
+    function c5(t) {
+      e.object.isPerspectiveCamera ? g *= t : e.object.isOrthographicCamera ? (e.object.zoom = Math.max(e.minZoom, Math.min(e.maxZoom, e.object.zoom / t)), e.object.updateProjectionMatrix(), _ = !0) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."), e.enableZoom = !1);
     }
     function l5(t) {
-      e.object.isPerspectiveCamera ? y *= t : e.object.isOrthographicCamera ? (e.object.zoom = Math.max(e.minZoom, Math.min(e.maxZoom, e.object.zoom / t)), e.object.updateProjectionMatrix(), f = !0) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."), e.enableZoom = !1);
+      M.set(t.clientX, t.clientY);
+    }
+    function _5(t) {
+      A.set(t.clientX, t.clientY);
     }
     function h5(t) {
-      g.set(t.clientX, t.clientY);
+      O.set(t.clientX, t.clientY);
     }
     function K5(t) {
-      L.set(t.clientX, t.clientY);
-    }
-    function d5(t) {
-      w.set(t.clientX, t.clientY);
+      T.set(t.clientX, t.clientY), x.subVectors(T, M).multiplyScalar(e.rotateSpeed);
+      const o = e.domElement;
+      H(2 * Math.PI * x.x / o.clientHeight), U(2 * Math.PI * x.y / o.clientHeight), M.copy(T), e.update();
     }
     function F5(t) {
-      E.set(t.clientX, t.clientY), P.subVectors(E, g).multiplyScalar(e.rotateSpeed);
-      const a = e.domElement;
-      C(2 * Math.PI * P.x / a.clientHeight), G(2 * Math.PI * P.y / a.clientHeight), g.copy(E), e.update();
-    }
-    function X5(t) {
-      k.set(t.clientX, t.clientY), j.subVectors(k, L), j.y > 0 ? J(X()) : j.y < 0 && l5(X()), L.copy(k), e.update();
-    }
-    function G5(t) {
-      h.set(t.clientX, t.clientY), M.subVectors(h, w).multiplyScalar(e.panSpeed), R(M.x, M.y), w.copy(h), e.update();
+      D.set(t.clientX, t.clientY), C.subVectors(D, A), C.y > 0 ? Q(F()) : C.y < 0 && c5(F()), A.copy(D), e.update();
     }
     function U5(t) {
-      t.deltaY < 0 ? l5(X()) : t.deltaY > 0 && J(X()), e.update();
+      S.set(t.clientX, t.clientY), L.subVectors(S, O).multiplyScalar(e.panSpeed), k(L.x, L.y), O.copy(S), e.update();
     }
     function Z5(t) {
-      let a = !1;
+      t.deltaY < 0 ? c5(F()) : t.deltaY > 0 && Q(F()), e.update();
+    }
+    function X5(t) {
+      let o = !1;
       switch (t.code) {
         case e.keys.UP:
-          t.ctrlKey || t.metaKey || t.shiftKey ? G(2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : R(0, e.keyPanSpeed), a = !0;
+          t.ctrlKey || t.metaKey || t.shiftKey ? U(2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(0, e.keyPanSpeed), o = !0;
           break;
         case e.keys.BOTTOM:
-          t.ctrlKey || t.metaKey || t.shiftKey ? G(-2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : R(0, -e.keyPanSpeed), a = !0;
+          t.ctrlKey || t.metaKey || t.shiftKey ? U(-2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(0, -e.keyPanSpeed), o = !0;
           break;
         case e.keys.LEFT:
-          t.ctrlKey || t.metaKey || t.shiftKey ? C(2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : R(e.keyPanSpeed, 0), a = !0;
+          t.ctrlKey || t.metaKey || t.shiftKey ? H(2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(e.keyPanSpeed, 0), o = !0;
           break;
         case e.keys.RIGHT:
-          t.ctrlKey || t.metaKey || t.shiftKey ? C(-2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : R(-e.keyPanSpeed, 0), a = !0;
+          t.ctrlKey || t.metaKey || t.shiftKey ? H(-2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(-e.keyPanSpeed, 0), o = !0;
           break;
       }
-      a && (t.preventDefault(), e.update());
+      o && (t.preventDefault(), e.update());
     }
     function u5() {
-      if (l.length === 1)
-        g.set(l[0].pageX, l[0].pageY);
+      if (c.length === 1)
+        M.set(c[0].pageX, c[0].pageY);
       else {
-        const t = 0.5 * (l[0].pageX + l[1].pageX), a = 0.5 * (l[0].pageY + l[1].pageY);
-        g.set(t, a);
+        const t = 0.5 * (c[0].pageX + c[1].pageX), o = 0.5 * (c[0].pageY + c[1].pageY);
+        M.set(t, o);
+      }
+    }
+    function d5() {
+      if (c.length === 1)
+        O.set(c[0].pageX, c[0].pageY);
+      else {
+        const t = 0.5 * (c[0].pageX + c[1].pageX), o = 0.5 * (c[0].pageY + c[1].pageY);
+        O.set(t, o);
       }
     }
     function p5() {
-      if (l.length === 1)
-        w.set(l[0].pageX, l[0].pageY);
-      else {
-        const t = 0.5 * (l[0].pageX + l[1].pageX), a = 0.5 * (l[0].pageY + l[1].pageY);
-        w.set(t, a);
-      }
+      const t = c[0].pageX - c[1].pageX, o = c[0].pageY - c[1].pageY, h = Math.sqrt(t * t + o * o);
+      A.set(0, h);
     }
-    function f5() {
-      const t = l[0].pageX - l[1].pageX, a = l[0].pageY - l[1].pageY, m = Math.sqrt(t * t + a * a);
-      L.set(0, m);
-    }
-    function W5() {
-      e.enableZoom && f5(), e.enablePan && p5();
+    function G5() {
+      e.enableZoom && p5(), e.enablePan && d5();
     }
     function V5() {
-      e.enableZoom && f5(), e.enableRotate && u5();
+      e.enableZoom && p5(), e.enableRotate && u5();
+    }
+    function f5(t) {
+      if (c.length == 1)
+        T.set(t.pageX, t.pageY);
+      else {
+        const h = e5(t), u = 0.5 * (t.pageX + h.x), m = 0.5 * (t.pageY + h.y);
+        T.set(u, m);
+      }
+      x.subVectors(T, M).multiplyScalar(e.rotateSpeed);
+      const o = e.domElement;
+      H(2 * Math.PI * x.x / o.clientHeight), U(2 * Math.PI * x.y / o.clientHeight), M.copy(T);
     }
     function m5(t) {
-      if (l.length == 1)
-        E.set(t.pageX, t.pageY);
+      if (c.length === 1)
+        S.set(t.pageX, t.pageY);
       else {
-        const m = t5(t), b = 0.5 * (t.pageX + m.x), x = 0.5 * (t.pageY + m.y);
-        E.set(b, x);
+        const o = e5(t), h = 0.5 * (t.pageX + o.x), u = 0.5 * (t.pageY + o.y);
+        S.set(h, u);
       }
-      P.subVectors(E, g).multiplyScalar(e.rotateSpeed);
-      const a = e.domElement;
-      C(2 * Math.PI * P.x / a.clientHeight), G(2 * Math.PI * P.y / a.clientHeight), g.copy(E);
+      L.subVectors(S, O).multiplyScalar(e.panSpeed), k(L.x, L.y), O.copy(S);
     }
     function b5(t) {
-      if (l.length === 1)
-        h.set(t.pageX, t.pageY);
-      else {
-        const a = t5(t), m = 0.5 * (t.pageX + a.x), b = 0.5 * (t.pageY + a.y);
-        h.set(m, b);
-      }
-      M.subVectors(h, w).multiplyScalar(e.panSpeed), R(M.x, M.y), w.copy(h);
+      const o = e5(t), h = t.pageX - o.x, u = t.pageY - o.y, m = Math.sqrt(h * h + u * u);
+      D.set(0, m), C.set(0, Math.pow(D.y / A.y, e.zoomSpeed)), Q(C.y), A.copy(D);
     }
-    function y5(t) {
-      const a = t5(t), m = t.pageX - a.x, b = t.pageY - a.y, x = Math.sqrt(m * m + b * b);
-      k.set(0, x), j.set(0, Math.pow(k.y / L.y, e.zoomSpeed)), J(j.y), L.copy(k);
+    function W5(t) {
+      e.enableZoom && b5(t), e.enablePan && m5(t);
     }
     function B5(t) {
-      e.enableZoom && y5(t), e.enablePan && b5(t);
-    }
-    function q5(t) {
-      e.enableZoom && y5(t), e.enableRotate && m5(t);
+      e.enableZoom && b5(t), e.enableRotate && f5(t);
     }
     function g5(t) {
-      e.enabled !== !1 && (l.length === 0 && (e.domElement.setPointerCapture(t.pointerId), e.domElement.addEventListener("pointermove", $), e.domElement.addEventListener("pointerup", e5)), t4(t), t.pointerType === "touch" ? $5(t) : Q5(t));
+      e.enabled !== !1 && (c.length === 0 && (e.domElement.setPointerCapture(t.pointerId), e.domElement.addEventListener("pointermove", J), e.domElement.addEventListener("pointerup", $)), e4(t), t.pointerType === "touch" ? J5(t) : q5(t));
+    }
+    function J(t) {
+      e.enabled !== !1 && (t.pointerType === "touch" ? $5(t) : Q5(t));
     }
     function $(t) {
-      e.enabled !== !1 && (t.pointerType === "touch" ? e4(t) : J5(t));
+      M5(t), c.length === 0 && (e.domElement.releasePointerCapture(t.pointerId), e.domElement.removeEventListener("pointermove", J), e.domElement.removeEventListener("pointerup", $)), e.dispatchEvent(A5), i = n.NONE;
     }
-    function e5(t) {
-      M5(t), l.length === 0 && (e.domElement.releasePointerCapture(t.pointerId), e.domElement.removeEventListener("pointermove", $), e.domElement.removeEventListener("pointerup", e5)), e.dispatchEvent(D5), i = n.NONE;
-    }
-    function E5(t) {
+    function y5(t) {
       M5(t);
     }
-    function Q5(t) {
-      let a;
+    function q5(t) {
+      let o;
       switch (t.button) {
         case 0:
-          a = e.mouseButtons.LEFT;
+          o = e.mouseButtons.LEFT;
           break;
         case 1:
-          a = e.mouseButtons.MIDDLE;
+          o = e.mouseButtons.MIDDLE;
           break;
         case 2:
-          a = e.mouseButtons.RIGHT;
+          o = e.mouseButtons.RIGHT;
           break;
         default:
-          a = -1;
+          o = -1;
       }
-      switch (a) {
-        case I.DOLLY:
+      switch (o) {
+        case j.DOLLY:
           if (e.enableZoom === !1)
             return;
-          K5(t), i = n.DOLLY;
+          _5(t), i = n.DOLLY;
           break;
-        case I.ROTATE:
+        case j.ROTATE:
           if (t.ctrlKey || t.metaKey || t.shiftKey) {
             if (e.enablePan === !1)
               return;
-            d5(t), i = n.PAN;
+            h5(t), i = n.PAN;
           } else {
             if (e.enableRotate === !1)
               return;
-            h5(t), i = n.ROTATE;
+            l5(t), i = n.ROTATE;
           }
           break;
-        case I.PAN:
+        case j.PAN:
           if (t.ctrlKey || t.metaKey || t.shiftKey) {
             if (e.enableRotate === !1)
               return;
-            h5(t), i = n.ROTATE;
+            l5(t), i = n.ROTATE;
           } else {
             if (e.enablePan === !1)
               return;
-            d5(t), i = n.PAN;
+            h5(t), i = n.PAN;
           }
           break;
         default:
           i = n.NONE;
       }
-      i !== n.NONE && e.dispatchEvent(n5);
+      i !== n.NONE && e.dispatchEvent(t5);
     }
-    function J5(t) {
+    function Q5(t) {
       switch (i) {
         case n.ROTATE:
           if (e.enableRotate === !1)
             return;
-          F5(t);
+          K5(t);
           break;
         case n.DOLLY:
           if (e.enableZoom === !1)
             return;
-          X5(t);
+          F5(t);
           break;
         case n.PAN:
           if (e.enablePan === !1)
             return;
-          G5(t);
+          U5(t);
           break;
       }
     }
+    function E5(t) {
+      e.enabled === !1 || e.enableZoom === !1 || i !== n.NONE || (t.preventDefault(), e.dispatchEvent(t5), Z5(t), e.dispatchEvent(A5));
+    }
     function w5(t) {
-      e.enabled === !1 || e.enableZoom === !1 || i !== n.NONE || (t.preventDefault(), e.dispatchEvent(n5), U5(t), e.dispatchEvent(D5));
+      e.enabled === !1 || e.enablePan === !1 || X5(t);
     }
-    function P5(t) {
-      e.enabled === !1 || e.enablePan === !1 || Z5(t);
-    }
-    function $5(t) {
-      switch (x5(t), l.length) {
+    function J5(t) {
+      switch (T5(t), c.length) {
         case 1:
           switch (e.touches.ONE) {
-            case N.ROTATE:
+            case I.ROTATE:
               if (e.enableRotate === !1)
                 return;
               u5(), i = n.TOUCH_ROTATE;
               break;
-            case N.PAN:
+            case I.PAN:
               if (e.enablePan === !1)
                 return;
-              p5(), i = n.TOUCH_PAN;
+              d5(), i = n.TOUCH_PAN;
               break;
             default:
               i = n.NONE;
@@ -284,12 +285,12 @@ class y4 extends n4 {
           break;
         case 2:
           switch (e.touches.TWO) {
-            case N.DOLLY_PAN:
+            case I.DOLLY_PAN:
               if (e.enableZoom === !1 && e.enablePan === !1)
                 return;
-              W5(), i = n.TOUCH_DOLLY_PAN;
+              G5(), i = n.TOUCH_DOLLY_PAN;
               break;
-            case N.DOLLY_ROTATE:
+            case I.DOLLY_ROTATE:
               if (e.enableZoom === !1 && e.enableRotate === !1)
                 return;
               V5(), i = n.TOUCH_DOLLY_ROTATE;
@@ -301,148 +302,96 @@ class y4 extends n4 {
         default:
           i = n.NONE;
       }
-      i !== n.NONE && e.dispatchEvent(n5);
+      i !== n.NONE && e.dispatchEvent(t5);
     }
-    function e4(t) {
-      switch (x5(t), i) {
+    function $5(t) {
+      switch (T5(t), i) {
         case n.TOUCH_ROTATE:
           if (e.enableRotate === !1)
             return;
-          m5(t), e.update();
+          f5(t), e.update();
           break;
         case n.TOUCH_PAN:
           if (e.enablePan === !1)
             return;
-          b5(t), e.update();
+          m5(t), e.update();
           break;
         case n.TOUCH_DOLLY_PAN:
           if (e.enableZoom === !1 && e.enablePan === !1)
             return;
-          B5(t), e.update();
+          W5(t), e.update();
           break;
         case n.TOUCH_DOLLY_ROTATE:
           if (e.enableZoom === !1 && e.enableRotate === !1)
             return;
-          q5(t), e.update();
+          B5(t), e.update();
           break;
         default:
           i = n.NONE;
       }
     }
-    function T5(t) {
+    function P5(t) {
       e.enabled !== !1 && t.preventDefault();
     }
-    function t4(t) {
-      l.push(t);
+    function e4(t) {
+      c.push(t);
     }
     function M5(t) {
-      delete F[t.pointerId];
-      for (let a = 0; a < l.length; a++)
-        if (l[a].pointerId == t.pointerId) {
-          l.splice(a, 1);
+      delete K[t.pointerId];
+      for (let o = 0; o < c.length; o++)
+        if (c[o].pointerId == t.pointerId) {
+          c.splice(o, 1);
           return;
         }
     }
-    function x5(t) {
-      let a = F[t.pointerId];
-      a === void 0 && (a = new S(), F[t.pointerId] = a), a.set(t.pageX, t.pageY);
+    function T5(t) {
+      let o = K[t.pointerId];
+      o === void 0 && (o = new b(), K[t.pointerId] = o), o.set(t.pageX, t.pageY);
     }
-    function t5(t) {
-      const a = t.pointerId === l[0].pointerId ? l[1] : l[0];
-      return F[a.pointerId];
+    function e5(t) {
+      const o = t.pointerId === c[0].pointerId ? c[1] : c[0];
+      return K[o.pointerId];
     }
-    e.domElement.addEventListener("contextmenu", T5), e.domElement.addEventListener("pointerdown", g5), e.domElement.addEventListener("pointercancel", E5), e.domElement.addEventListener("wheel", w5, { passive: !1 }), this.update();
+    e.domElement.addEventListener("contextmenu", P5), e.domElement.addEventListener("pointerdown", g5), e.domElement.addEventListener("pointercancel", y5), e.domElement.addEventListener("wheel", E5, { passive: !1 }), this.update();
   }
 }
-var Y = function() {
-  var u = 0, o = document.createElement("div");
-  o.style.cssText = "position:fixed;top:0;left:0;cursor:pointer;opacity:0.9;z-index:10000", o.addEventListener("click", function(d) {
-    d.preventDefault(), e(++u % o.children.length);
-  }, !1);
-  function s(d) {
-    return o.appendChild(d.dom), d;
-  }
-  function e(d) {
-    for (var f = 0; f < o.children.length; f++)
-      o.children[f].style.display = f === d ? "block" : "none";
-    u = d;
-  }
-  var n = (performance || Date).now(), i = n, c = 0, r = s(new Y.Panel("FPS", "#0ff", "#002")), p = s(new Y.Panel("MS", "#0f0", "#020"));
-  if (self.performance && self.performance.memory)
-    var y = s(new Y.Panel("MB", "#f08", "#201"));
-  return e(0), {
-    REVISION: 16,
-    dom: o,
-    addPanel: s,
-    showPanel: e,
-    begin: function() {
-      n = (performance || Date).now();
-    },
-    end: function() {
-      c++;
-      var d = (performance || Date).now();
-      if (p.update(d - n, 200), d >= i + 1e3 && (r.update(c * 1e3 / (d - i), 100), i = d, c = 0, y)) {
-        var f = performance.memory;
-        y.update(f.usedJSHeapSize / 1048576, f.jsHeapSizeLimit / 1048576);
-      }
-      return d;
-    },
-    update: function() {
-      n = this.end();
-    },
-    domElement: o,
-    setMode: e
-  };
-};
-Y.Panel = function(u, o, s) {
-  var e = 1 / 0, n = 0, i = Math.round, c = i(window.devicePixelRatio || 1), r = 80 * c, p = 48 * c, y = 3 * c, d = 2 * c, f = 3 * c, g = 15 * c, E = 74 * c, P = 30 * c, w = document.createElement("canvas");
-  w.width = r, w.height = p, w.style.cssText = "width:80px;height:48px";
-  var h = w.getContext("2d");
-  return h.font = "bold " + 9 * c + "px Helvetica,Arial,sans-serif", h.textBaseline = "top", h.fillStyle = s, h.fillRect(0, 0, r, p), h.fillStyle = o, h.fillText(u, y, d), h.fillRect(f, g, E, P), h.fillStyle = s, h.globalAlpha = 0.9, h.fillRect(f, g, E, P), {
-    dom: w,
-    update: function(M, L) {
-      e = Math.min(e, M), n = Math.max(n, M), h.fillStyle = s, h.globalAlpha = 1, h.fillRect(0, 0, r, g), h.fillStyle = o, h.fillText(i(M) + " " + u + " (" + i(e) + "-" + i(n) + ")", y, d), h.drawImage(w, f + c, g, E - c, P, f, g, E - c, P), h.fillRect(f + E - c, g, c, P), h.fillStyle = s, h.globalAlpha = 0.9, h.fillRect(f + E - c, g, c, i((1 - M / L) * P));
-    }
-  };
-};
-const g4 = Y;
-class E4 {
-  constructor(o) {
-    this.trees = o;
+class y4 {
+  constructor(a) {
+    this.trees = a;
   }
   updateVisibility() {
-    let o = 0;
-    for (let s = 0; s < this.trees.length; s++)
+    let a = 0;
+    for (let r = 0; r < this.trees.length; r++)
       for (let e = 0; e < this.trees[0].length; e++)
-        o += this.trees[s][e].updateVisibility(this.trees);
-    this.visibleTrees = o;
+        a += this.trees[r][e].updateVisibility(this.trees);
+    this.visibleTrees = a;
   }
 }
-class w4 {
-  constructor(o, s, e) {
-    this.x = o, this.y = s, this.height = e;
+class E4 {
+  constructor(a, r, e) {
+    this.x = a, this.y = r, this.height = e;
   }
-  updateDirection(o, s, e, n, i) {
-    let c = 0;
-    for (let r = o; e(r); r += n) {
-      const p = i(r), y = p !== this;
-      if (y && c++, y && p.height >= this.height)
+  updateDirection(a, r, e, n, i) {
+    let d = 0;
+    for (let s = a; e(s); s += n) {
+      const p = i(s), g = p !== this;
+      if (g && d++, g && p.height >= this.height)
         break;
-      r === s && (this.visible = !0);
+      s === r && (this.visible = !0);
     }
-    this.visibleTrees.push(c);
+    this.visibleTrees.push(d);
   }
-  updateVisibility(o) {
+  updateVisibility(a) {
     this.visibleTrees = [], this.visible = !1;
-    const s = (n) => o[n][this.x], e = (n) => o[this.y][n];
-    return this.updateDirection(this.y, 0, (n) => n >= 0, -1, s), this.updateDirection(this.y, o.length - 1, (n) => n < o.length, 1, s), this.updateDirection(this.x, 0, (n) => n >= 0, -1, e), this.updateDirection(this.x, o[0].length - 1, (n) => n < o[0].length, 1, e), this.scenicScore = this.visibleTrees.reduce((n, i) => n * i, 1), this.visible ? 1 : 0;
+    const r = (n) => a[n][this.x], e = (n) => a[this.y][n];
+    return this.updateDirection(this.y, 0, (n) => n >= 0, -1, r), this.updateDirection(this.y, a.length - 1, (n) => n < a.length, 1, r), this.updateDirection(this.x, 0, (n) => n >= 0, -1, e), this.updateDirection(this.x, a[0].length - 1, (n) => n < a[0].length, 1, e), this.scenicScore = this.visibleTrees.reduce((n, i) => n * i, 1), this.visible ? 1 : 0;
   }
 }
-function P4(u) {
-  let o = o4(u).map((e, n) => e.split("").map((i, c) => new w4(c, n, Number(i)))), s = new E4(o);
-  return s.updateVisibility(), s;
+function w4(l) {
+  let a = n4(l).map((e, n) => e.split("").map((i, d) => new E4(d, n, Number(i)))), r = new y4(a);
+  return r.updateVisibility(), r;
 }
-const T4 = `300030213213113240234210203330153124541151003015456312312442524531405533542450111443312103110220211
+const P4 = `300030213213113240234210203330153124541151003015456312312442524531405533542450111443312103110220211
 133000004421300341005340432514034555543556261543410250030436135103304323425502113341331442032311030
 213121312230422241205230130541010120012561656126511652636160154566425231221254515542342023142010133
 210020103232311410025023513110540633654032560666266266442224400244155120504322112255323444432301210
@@ -540,103 +489,103 @@ const T4 = `30003021321311324023421020333015312454115100301545631231244252453140
 020023210301103025401200032420642652143243335333016204055261530250106466135400230513140242434444003
 310203111441432251152455421244135150164323516554016042002411655305545265404525521215102013341240121
 012320311100031143153052200224256541012135453345356532252242115324133425054343145333123421144111230
-311310344433212432240252542030050542510636225454204032233645040015025321421052152330422440232330022`, V = P4(T4);
+311310344433212432240252542030050542510636225454204032233645040015025321421052152330422440232330022`, V = w4(P4);
 console.log(V.trees.length * V.trees[0].length);
-let N5 = V.trees.reduce(
-  (u, o) => o.reduce((s, e) => (e.scenicScore > s.m && (s.m = e.scenicScore, s.tree = e), s), u),
+let I5 = V.trees.reduce(
+  (l, a) => a.reduce((r, e) => (e.scenicScore > r.m && (r.m = e.scenicScore, r.tree = e), r), l),
   { tree: null, m: 0 }
 ).tree;
-console.log(N5);
-const B = document.querySelector("#scene"), v5 = new g4();
-B.appendChild(v5.dom);
-function j5() {
-  q.setSize(B.clientWidth, B.clientHeight);
-}
+console.log(I5);
+const W = document.querySelector("#scene"), R5 = new b4();
+W.appendChild(R5.dom);
 function C5() {
-  requestAnimationFrame(C5), q.render(T, z), v5.update(), K.update();
+  B.setSize(W.clientWidth, W.clientHeight);
+}
+function H5() {
+  requestAnimationFrame(H5), B.render(f, Y), R5.update(), v.update();
 }
 function M4() {
-  const u = new I5(), o = 3.5, s = 2.5, e = 4.5, n = new Z(0.1, e, s, 16), i = new W({ color: 2759173 }), c = new v(n, i);
-  c.position.y = o + s / 2, u.add(c);
-  const r = 3, p = new Z(r, r, o, 16), y = new W({ color: 2759173 }), d = new v(p, y);
-  return d.position.y = o / 2, u.add(d), u;
+  const l = new j5(), a = 3.5, r = 2.5, e = 4.5, n = new X(0.1, e, r, 16), i = new G({ color: 2759173 }), d = new R(n, i);
+  d.position.y = a + r / 2, l.add(d);
+  const s = 3, p = new X(s, s, a, 16), g = new G({ color: 2759173 }), y = new R(p, g);
+  return y.position.y = a / 2, l.add(y), l;
 }
-const Y5 = 0.85, a5 = 0.15, k5 = 0.5, x4 = new Z(k5, k5 + 0.1, a5, 16), S4 = new W({ color: 4203786 }), O4 = new Z(0.01, 1.25, Y5, 16), R5 = [];
-function H5(u) {
-  let o = Math.sin(u * 3457.3937) * 2543.137;
-  return o = o - parseInt(o), o;
+const Y5 = 0.85, o5 = 0.15, D5 = 0.5, T4 = new X(D5, D5 + 0.1, o5, 16), O4 = new G({ color: 4203786 }), S4 = new X(0.01, 1.25, Y5, 16), k5 = [];
+function N5(l) {
+  let a = Math.sin(l * 3457.3937) * 2543.137;
+  return a = a - parseInt(a), a;
 }
-function A4(u) {
-  const o = new I5(), s = new v(x4, S4);
-  s.position.y = a5 / 2, o.add(s);
+function x4(l) {
+  const a = new j5(), r = new R(T4, O4);
+  r.position.y = o5 / 2, a.add(r);
   const e = 25;
   let n;
-  if (u <= e) {
-    let c = Math.floor(704538 + H5(u) * 335877);
-    n = new W({ color: c }), R5.push(n);
+  if (l <= e) {
+    let d = Math.floor(704538 + N5(l) * 335877);
+    n = new G({ color: d }), k5.push(n);
   } else
-    n = R5[Math.floor((H5(u) * 0.5 + 0.5) * e) % e];
-  const i = new v(O4, n);
-  return i.position.y = a5 + Y5 / 2, o.add(i), o;
+    n = k5[Math.floor((N5(l) * 0.5 + 0.5) * e) % e];
+  const i = new R(S4, n);
+  return i.position.y = o5 + Y5 / 2, a.add(i), a;
 }
-const T = new a4(), q = new i4(), z = new s4(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
-z.position.x = 0;
-z.position.z = 0;
-z.position.y = 50;
-T.background = new o5().setHSL(0.6, 0, 1);
-T.fog = new r4(T.background, 1, 1e3);
-const L4 = new c4(6316128, 0.9);
-T.add(L4);
-const _ = new l4(16777130, 16777130, 0.25);
-_.color.setHSL(0.6, 1, 0.6);
-_.groundColor.setHSL(0.095, 1, 0.75);
-_.position.set(0, 800, 0);
-T.add(_);
-const i5 = new h4(15790272, 1);
-i5.position.x = 0.3;
-i5.position.z = 0.7;
-T.add(i5);
-let D4 = 0, z5;
-V.trees.forEach((u, o) => {
-  u.forEach((s, e) => {
-    let n = A4(D4++);
-    n.position.x = (e - 49) * 4, n.position.z = (o - 49) * 4;
-    const i = Math.max(1, s.height * 2), c = s.height / 9 + 0.5;
-    if (n.scale.y = i, n.scale.x = n.scale.z = c, s === N5) {
-      let r = M4();
-      r.position.copy(n.position), r.position.y = s.height * 2 - 5, console.log(r.position), T.add(r), z5 = r;
+const f = new o4(), B = new a4(), Y = new i4(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
+Y.position.x = 0;
+Y.position.z = 0;
+Y.position.y = 50;
+f.background = new n5().setHSL(0.6, 0, 1);
+f.fog = new s4(f.background, 1, 1e3);
+const L4 = new r4(6316128, 0.9);
+f.add(L4);
+const z = new c4(16777130, 16777130, 0.25);
+z.color.setHSL(0.6, 1, 0.6);
+z.groundColor.setHSL(0.095, 1, 0.75);
+z.position.set(0, 800, 0);
+f.add(z);
+const a5 = new l4(15790272, 1);
+a5.position.x = 0.3;
+a5.position.z = 0.7;
+f.add(a5);
+let A4 = 0, z5;
+V.trees.forEach((l, a) => {
+  l.forEach((r, e) => {
+    let n = x4(A4++);
+    n.position.x = (e - 49) * 4, n.position.z = (a - 49) * 4;
+    const i = Math.max(1, r.height * 2), d = r.height / 9 + 0.5;
+    if (n.scale.y = i, n.scale.x = n.scale.z = d, r === I5) {
+      let s = M4();
+      s.position.copy(n.position), s.position.y = r.height * 2 - 5, console.log(s.position), f.add(s), z5 = s;
     }
-    T.add(n);
+    f.add(n);
   });
 });
-const k4 = new d4(2e3, 2e3, 1, 1), R4 = new u4({ color: 1077280 }), Q = new v(k4, R4);
-Q.rotateX(Math.PI / -2);
-Q.y = -0.05;
-Q.receiveShadow = !0;
-T.add(Q);
-const H4 = document.getElementById("vertexShader").textContent, I4 = document.getElementById("fragmentShader").textContent, s5 = {
-  topColor: { value: new o5(30719) },
-  bottomColor: { value: new o5(16777215) },
+const D4 = new h4(2e3, 2e3, 1, 1), k4 = new u4({ color: 1077280 }), q = new R(D4, k4);
+q.rotateX(Math.PI / -2);
+q.y = -0.05;
+q.receiveShadow = !0;
+f.add(q);
+const N4 = document.getElementById("vertexShader").textContent, j4 = document.getElementById("fragmentShader").textContent, i5 = {
+  topColor: { value: new n5(30719) },
+  bottomColor: { value: new n5(16777215) },
   offset: { value: 33 },
   exponent: { value: 0.6 }
 };
-s5.topColor.value.copy(_.color);
-T.fog.color.copy(s5.bottomColor.value);
-const N4 = new p4(900, 32, 15), v4 = new f4({
-  uniforms: s5,
-  vertexShader: H4,
-  fragmentShader: I4,
-  side: m4
-}), j4 = new v(N4, v4);
-T.add(j4);
-const K = new y4(z, q.domElement);
-K.autoRotate = !0;
-K.target = z5.position.clone();
-console.log("looking at ", K.target);
-K.update();
-const C4 = new b4();
-C4.start();
-B.appendChild(q.domElement);
-window.addEventListener("resize", j5);
-j5();
+i5.topColor.value.copy(z.color);
+f.fog.color.copy(i5.bottomColor.value);
+const I4 = new d4(900, 32, 15), R4 = new p4({
+  uniforms: i5,
+  vertexShader: N4,
+  fragmentShader: j4,
+  side: f4
+}), C4 = new R(I4, R4);
+f.add(C4);
+const v = new g4(Y, B.domElement);
+v.autoRotate = !0;
+v.target = z5.position.clone();
+console.log("looking at ", v.target);
+v.update();
+const H4 = new m4();
+H4.start();
+W.appendChild(B.domElement);
+window.addEventListener("resize", C5);
 C5();
+H5();
