@@ -1,397 +1,42 @@
-import { E as t4, c as P, d as j, T as I, Q as S5, e as x5, f as b, a as n4, g as X, h as G, S as o4, W as a4, i as i4, j as n5, F as s4, A as r4, H as c4, k as l4, P as h4, l as u4, M as R, m as d4, b as p4, B as f4, C as m4, n as j5 } from "./parsing.8b6b88a7.js";
-import { S as b4 } from "./stats.module.6d20f080.js";
-const L5 = { type: "change" }, t5 = { type: "start" }, A5 = { type: "end" };
-class g4 extends t4 {
-  constructor(a, r) {
-    super(), this.object = a, this.domElement = r, this.domElement.style.touchAction = "none", this.enabled = !0, this.target = new P(), this.minDistance = 0, this.maxDistance = 1 / 0, this.minZoom = 0, this.maxZoom = 1 / 0, this.minPolarAngle = 0, this.maxPolarAngle = Math.PI, this.minAzimuthAngle = -1 / 0, this.maxAzimuthAngle = 1 / 0, this.enableDamping = !1, this.dampingFactor = 0.05, this.enableZoom = !0, this.zoomSpeed = 1, this.enableRotate = !0, this.rotateSpeed = 1, this.enablePan = !0, this.panSpeed = 1, this.screenSpacePanning = !0, this.keyPanSpeed = 7, this.autoRotate = !1, this.autoRotateSpeed = 2, this.keys = { LEFT: "ArrowLeft", UP: "ArrowUp", RIGHT: "ArrowRight", BOTTOM: "ArrowDown" }, this.mouseButtons = { LEFT: j.ROTATE, MIDDLE: j.DOLLY, RIGHT: j.PAN }, this.touches = { ONE: I.ROTATE, TWO: I.DOLLY_PAN }, this.target0 = this.target.clone(), this.position0 = this.object.position.clone(), this.zoom0 = this.object.zoom, this._domElementKeyEvents = null, this.getPolarAngle = function() {
-      return s.phi;
-    }, this.getAzimuthalAngle = function() {
-      return s.theta;
-    }, this.getDistance = function() {
-      return this.object.position.distanceTo(this.target);
-    }, this.listenToKeyEvents = function(t) {
-      t.addEventListener("keydown", w5), this._domElementKeyEvents = t;
-    }, this.saveState = function() {
-      e.target0.copy(e.target), e.position0.copy(e.object.position), e.zoom0 = e.object.zoom;
-    }, this.reset = function() {
-      e.target.copy(e.target0), e.object.position.copy(e.position0), e.object.zoom = e.zoom0, e.object.updateProjectionMatrix(), e.dispatchEvent(L5), e.update(), i = n.NONE;
-    }, this.update = function() {
-      const t = new P(), o = new S5().setFromUnitVectors(a.up, new P(0, 1, 0)), h = o.clone().invert(), u = new P(), m = new S5(), N = 2 * Math.PI;
-      return function() {
-        const O5 = e.object.position;
-        t.copy(O5).sub(e.target), t.applyQuaternion(o), s.setFromVector3(t), e.autoRotate && i === n.NONE && H(v5()), e.enableDamping ? (s.theta += p.theta * e.dampingFactor, s.phi += p.phi * e.dampingFactor) : (s.theta += p.theta, s.phi += p.phi);
-        let E = e.minAzimuthAngle, w = e.maxAzimuthAngle;
-        return isFinite(E) && isFinite(w) && (E < -Math.PI ? E += N : E > Math.PI && (E -= N), w < -Math.PI ? w += N : w > Math.PI && (w -= N), E <= w ? s.theta = Math.max(E, Math.min(w, s.theta)) : s.theta = s.theta > (E + w) / 2 ? Math.max(E, s.theta) : Math.min(w, s.theta)), s.phi = Math.max(e.minPolarAngle, Math.min(e.maxPolarAngle, s.phi)), s.makeSafe(), s.radius *= g, s.radius = Math.max(e.minDistance, Math.min(e.maxDistance, s.radius)), e.enableDamping === !0 ? e.target.addScaledVector(y, e.dampingFactor) : e.target.add(y), t.setFromSpherical(s), t.applyQuaternion(h), O5.copy(e.target).add(t), e.object.lookAt(e.target), e.enableDamping === !0 ? (p.theta *= 1 - e.dampingFactor, p.phi *= 1 - e.dampingFactor, y.multiplyScalar(1 - e.dampingFactor)) : (p.set(0, 0, 0), y.set(0, 0, 0)), g = 1, _ || u.distanceToSquared(e.object.position) > d || 8 * (1 - m.dot(e.object.quaternion)) > d ? (e.dispatchEvent(L5), u.copy(e.object.position), m.copy(e.object.quaternion), _ = !1, !0) : !1;
-      };
-    }(), this.dispose = function() {
-      e.domElement.removeEventListener("contextmenu", P5), e.domElement.removeEventListener("pointerdown", g5), e.domElement.removeEventListener("pointercancel", y5), e.domElement.removeEventListener("wheel", E5), e.domElement.removeEventListener("pointermove", J), e.domElement.removeEventListener("pointerup", $), e._domElementKeyEvents !== null && e._domElementKeyEvents.removeEventListener("keydown", w5);
-    };
-    const e = this, n = {
-      NONE: -1,
-      ROTATE: 0,
-      DOLLY: 1,
-      PAN: 2,
-      TOUCH_ROTATE: 3,
-      TOUCH_PAN: 4,
-      TOUCH_DOLLY_PAN: 5,
-      TOUCH_DOLLY_ROTATE: 6
-    };
-    let i = n.NONE;
-    const d = 1e-6, s = new x5(), p = new x5();
-    let g = 1;
-    const y = new P();
-    let _ = !1;
-    const M = new b(), T = new b(), x = new b(), O = new b(), S = new b(), L = new b(), A = new b(), D = new b(), C = new b(), c = [], K = {};
-    function v5() {
-      return 2 * Math.PI / 60 / 60 * e.autoRotateSpeed;
-    }
-    function F() {
-      return Math.pow(0.95, e.zoomSpeed);
-    }
-    function H(t) {
-      p.theta -= t;
-    }
-    function U(t) {
-      p.phi -= t;
-    }
-    const s5 = function() {
-      const t = new P();
-      return function(h, u) {
-        t.setFromMatrixColumn(u, 0), t.multiplyScalar(-h), y.add(t);
-      };
-    }(), r5 = function() {
-      const t = new P();
-      return function(h, u) {
-        e.screenSpacePanning === !0 ? t.setFromMatrixColumn(u, 1) : (t.setFromMatrixColumn(u, 0), t.crossVectors(e.object.up, t)), t.multiplyScalar(h), y.add(t);
-      };
-    }(), k = function() {
-      const t = new P();
-      return function(h, u) {
-        const m = e.domElement;
-        if (e.object.isPerspectiveCamera) {
-          const N = e.object.position;
-          t.copy(N).sub(e.target);
-          let Z = t.length();
-          Z *= Math.tan(e.object.fov / 2 * Math.PI / 180), s5(2 * h * Z / m.clientHeight, e.object.matrix), r5(2 * u * Z / m.clientHeight, e.object.matrix);
-        } else
-          e.object.isOrthographicCamera ? (s5(h * (e.object.right - e.object.left) / e.object.zoom / m.clientWidth, e.object.matrix), r5(u * (e.object.top - e.object.bottom) / e.object.zoom / m.clientHeight, e.object.matrix)) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."), e.enablePan = !1);
-      };
-    }();
-    function Q(t) {
-      e.object.isPerspectiveCamera ? g /= t : e.object.isOrthographicCamera ? (e.object.zoom = Math.max(e.minZoom, Math.min(e.maxZoom, e.object.zoom * t)), e.object.updateProjectionMatrix(), _ = !0) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."), e.enableZoom = !1);
-    }
-    function c5(t) {
-      e.object.isPerspectiveCamera ? g *= t : e.object.isOrthographicCamera ? (e.object.zoom = Math.max(e.minZoom, Math.min(e.maxZoom, e.object.zoom / t)), e.object.updateProjectionMatrix(), _ = !0) : (console.warn("WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."), e.enableZoom = !1);
-    }
-    function l5(t) {
-      M.set(t.clientX, t.clientY);
-    }
-    function _5(t) {
-      A.set(t.clientX, t.clientY);
-    }
-    function h5(t) {
-      O.set(t.clientX, t.clientY);
-    }
-    function K5(t) {
-      T.set(t.clientX, t.clientY), x.subVectors(T, M).multiplyScalar(e.rotateSpeed);
-      const o = e.domElement;
-      H(2 * Math.PI * x.x / o.clientHeight), U(2 * Math.PI * x.y / o.clientHeight), M.copy(T), e.update();
-    }
-    function F5(t) {
-      D.set(t.clientX, t.clientY), C.subVectors(D, A), C.y > 0 ? Q(F()) : C.y < 0 && c5(F()), A.copy(D), e.update();
-    }
-    function U5(t) {
-      S.set(t.clientX, t.clientY), L.subVectors(S, O).multiplyScalar(e.panSpeed), k(L.x, L.y), O.copy(S), e.update();
-    }
-    function Z5(t) {
-      t.deltaY < 0 ? c5(F()) : t.deltaY > 0 && Q(F()), e.update();
-    }
-    function X5(t) {
-      let o = !1;
-      switch (t.code) {
-        case e.keys.UP:
-          t.ctrlKey || t.metaKey || t.shiftKey ? U(2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(0, e.keyPanSpeed), o = !0;
-          break;
-        case e.keys.BOTTOM:
-          t.ctrlKey || t.metaKey || t.shiftKey ? U(-2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(0, -e.keyPanSpeed), o = !0;
-          break;
-        case e.keys.LEFT:
-          t.ctrlKey || t.metaKey || t.shiftKey ? H(2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(e.keyPanSpeed, 0), o = !0;
-          break;
-        case e.keys.RIGHT:
-          t.ctrlKey || t.metaKey || t.shiftKey ? H(-2 * Math.PI * e.rotateSpeed / e.domElement.clientHeight) : k(-e.keyPanSpeed, 0), o = !0;
-          break;
-      }
-      o && (t.preventDefault(), e.update());
-    }
-    function u5() {
-      if (c.length === 1)
-        M.set(c[0].pageX, c[0].pageY);
-      else {
-        const t = 0.5 * (c[0].pageX + c[1].pageX), o = 0.5 * (c[0].pageY + c[1].pageY);
-        M.set(t, o);
-      }
-    }
-    function d5() {
-      if (c.length === 1)
-        O.set(c[0].pageX, c[0].pageY);
-      else {
-        const t = 0.5 * (c[0].pageX + c[1].pageX), o = 0.5 * (c[0].pageY + c[1].pageY);
-        O.set(t, o);
-      }
-    }
-    function p5() {
-      const t = c[0].pageX - c[1].pageX, o = c[0].pageY - c[1].pageY, h = Math.sqrt(t * t + o * o);
-      A.set(0, h);
-    }
-    function G5() {
-      e.enableZoom && p5(), e.enablePan && d5();
-    }
-    function V5() {
-      e.enableZoom && p5(), e.enableRotate && u5();
-    }
-    function f5(t) {
-      if (c.length == 1)
-        T.set(t.pageX, t.pageY);
-      else {
-        const h = e5(t), u = 0.5 * (t.pageX + h.x), m = 0.5 * (t.pageY + h.y);
-        T.set(u, m);
-      }
-      x.subVectors(T, M).multiplyScalar(e.rotateSpeed);
-      const o = e.domElement;
-      H(2 * Math.PI * x.x / o.clientHeight), U(2 * Math.PI * x.y / o.clientHeight), M.copy(T);
-    }
-    function m5(t) {
-      if (c.length === 1)
-        S.set(t.pageX, t.pageY);
-      else {
-        const o = e5(t), h = 0.5 * (t.pageX + o.x), u = 0.5 * (t.pageY + o.y);
-        S.set(h, u);
-      }
-      L.subVectors(S, O).multiplyScalar(e.panSpeed), k(L.x, L.y), O.copy(S);
-    }
-    function b5(t) {
-      const o = e5(t), h = t.pageX - o.x, u = t.pageY - o.y, m = Math.sqrt(h * h + u * u);
-      D.set(0, m), C.set(0, Math.pow(D.y / A.y, e.zoomSpeed)), Q(C.y), A.copy(D);
-    }
-    function W5(t) {
-      e.enableZoom && b5(t), e.enablePan && m5(t);
-    }
-    function B5(t) {
-      e.enableZoom && b5(t), e.enableRotate && f5(t);
-    }
-    function g5(t) {
-      e.enabled !== !1 && (c.length === 0 && (e.domElement.setPointerCapture(t.pointerId), e.domElement.addEventListener("pointermove", J), e.domElement.addEventListener("pointerup", $)), e4(t), t.pointerType === "touch" ? J5(t) : q5(t));
-    }
-    function J(t) {
-      e.enabled !== !1 && (t.pointerType === "touch" ? $5(t) : Q5(t));
-    }
-    function $(t) {
-      M5(t), c.length === 0 && (e.domElement.releasePointerCapture(t.pointerId), e.domElement.removeEventListener("pointermove", J), e.domElement.removeEventListener("pointerup", $)), e.dispatchEvent(A5), i = n.NONE;
-    }
-    function y5(t) {
-      M5(t);
-    }
-    function q5(t) {
-      let o;
-      switch (t.button) {
-        case 0:
-          o = e.mouseButtons.LEFT;
-          break;
-        case 1:
-          o = e.mouseButtons.MIDDLE;
-          break;
-        case 2:
-          o = e.mouseButtons.RIGHT;
-          break;
-        default:
-          o = -1;
-      }
-      switch (o) {
-        case j.DOLLY:
-          if (e.enableZoom === !1)
-            return;
-          _5(t), i = n.DOLLY;
-          break;
-        case j.ROTATE:
-          if (t.ctrlKey || t.metaKey || t.shiftKey) {
-            if (e.enablePan === !1)
-              return;
-            h5(t), i = n.PAN;
-          } else {
-            if (e.enableRotate === !1)
-              return;
-            l5(t), i = n.ROTATE;
-          }
-          break;
-        case j.PAN:
-          if (t.ctrlKey || t.metaKey || t.shiftKey) {
-            if (e.enableRotate === !1)
-              return;
-            l5(t), i = n.ROTATE;
-          } else {
-            if (e.enablePan === !1)
-              return;
-            h5(t), i = n.PAN;
-          }
-          break;
-        default:
-          i = n.NONE;
-      }
-      i !== n.NONE && e.dispatchEvent(t5);
-    }
-    function Q5(t) {
-      switch (i) {
-        case n.ROTATE:
-          if (e.enableRotate === !1)
-            return;
-          K5(t);
-          break;
-        case n.DOLLY:
-          if (e.enableZoom === !1)
-            return;
-          F5(t);
-          break;
-        case n.PAN:
-          if (e.enablePan === !1)
-            return;
-          U5(t);
-          break;
-      }
-    }
-    function E5(t) {
-      e.enabled === !1 || e.enableZoom === !1 || i !== n.NONE || (t.preventDefault(), e.dispatchEvent(t5), Z5(t), e.dispatchEvent(A5));
-    }
-    function w5(t) {
-      e.enabled === !1 || e.enablePan === !1 || X5(t);
-    }
-    function J5(t) {
-      switch (T5(t), c.length) {
-        case 1:
-          switch (e.touches.ONE) {
-            case I.ROTATE:
-              if (e.enableRotate === !1)
-                return;
-              u5(), i = n.TOUCH_ROTATE;
-              break;
-            case I.PAN:
-              if (e.enablePan === !1)
-                return;
-              d5(), i = n.TOUCH_PAN;
-              break;
-            default:
-              i = n.NONE;
-          }
-          break;
-        case 2:
-          switch (e.touches.TWO) {
-            case I.DOLLY_PAN:
-              if (e.enableZoom === !1 && e.enablePan === !1)
-                return;
-              G5(), i = n.TOUCH_DOLLY_PAN;
-              break;
-            case I.DOLLY_ROTATE:
-              if (e.enableZoom === !1 && e.enableRotate === !1)
-                return;
-              V5(), i = n.TOUCH_DOLLY_ROTATE;
-              break;
-            default:
-              i = n.NONE;
-          }
-          break;
-        default:
-          i = n.NONE;
-      }
-      i !== n.NONE && e.dispatchEvent(t5);
-    }
-    function $5(t) {
-      switch (T5(t), i) {
-        case n.TOUCH_ROTATE:
-          if (e.enableRotate === !1)
-            return;
-          f5(t), e.update();
-          break;
-        case n.TOUCH_PAN:
-          if (e.enablePan === !1)
-            return;
-          m5(t), e.update();
-          break;
-        case n.TOUCH_DOLLY_PAN:
-          if (e.enableZoom === !1 && e.enablePan === !1)
-            return;
-          W5(t), e.update();
-          break;
-        case n.TOUCH_DOLLY_ROTATE:
-          if (e.enableZoom === !1 && e.enableRotate === !1)
-            return;
-          B5(t), e.update();
-          break;
-        default:
-          i = n.NONE;
-      }
-    }
-    function P5(t) {
-      e.enabled !== !1 && t.preventDefault();
-    }
-    function e4(t) {
-      c.push(t);
-    }
-    function M5(t) {
-      delete K[t.pointerId];
-      for (let o = 0; o < c.length; o++)
-        if (c[o].pointerId == t.pointerId) {
-          c.splice(o, 1);
-          return;
-        }
-    }
-    function T5(t) {
-      let o = K[t.pointerId];
-      o === void 0 && (o = new b(), K[t.pointerId] = o), o.set(t.pageX, t.pageY);
-    }
-    function e5(t) {
-      const o = t.pointerId === c[0].pointerId ? c[1] : c[0];
-      return K[o.pointerId];
-    }
-    e.domElement.addEventListener("contextmenu", P5), e.domElement.addEventListener("pointerdown", g5), e.domElement.addEventListener("pointercancel", y5), e.domElement.addEventListener("wheel", E5, { passive: !1 }), this.update();
-  }
-}
-class y4 {
-  constructor(a) {
-    this.trees = a;
+import { a as I, c as g, d as w, S as O, W as P, e as V, f as S, F as j, A, H as q, g as R, P as N, h as X, M as l, i as J, b as K, B as Q, C as U, j as z } from "./parsing.c9e1c62d.js";
+import { S as Y, O as Z } from "./stats.module.a5aba488.js";
+class _ {
+  constructor(e) {
+    this.trees = e;
   }
   updateVisibility() {
-    let a = 0;
-    for (let r = 0; r < this.trees.length; r++)
-      for (let e = 0; e < this.trees[0].length; e++)
-        a += this.trees[r][e].updateVisibility(this.trees);
-    this.visibleTrees = a;
+    let e = 0;
+    for (let o = 0; o < this.trees.length; o++)
+      for (let n = 0; n < this.trees[0].length; n++)
+        e += this.trees[o][n].updateVisibility(this.trees);
+    this.visibleTrees = e;
   }
 }
-class E4 {
-  constructor(a, r, e) {
-    this.x = a, this.y = r, this.height = e;
+class $ {
+  constructor(e, o, n) {
+    this.x = e, this.y = o, this.height = n;
   }
-  updateDirection(a, r, e, n, i) {
-    let d = 0;
-    for (let s = a; e(s); s += n) {
-      const p = i(s), g = p !== this;
-      if (g && d++, g && p.height >= this.height)
+  updateDirection(e, o, n, t, r) {
+    let c = 0;
+    for (let i = e; n(i); i += t) {
+      const f = r(i), p = f !== this;
+      if (p && c++, p && f.height >= this.height)
         break;
-      s === r && (this.visible = !0);
+      i === o && (this.visible = !0);
     }
-    this.visibleTrees.push(d);
+    this.visibleTrees.push(c);
   }
-  updateVisibility(a) {
+  updateVisibility(e) {
     this.visibleTrees = [], this.visible = !1;
-    const r = (n) => a[n][this.x], e = (n) => a[this.y][n];
-    return this.updateDirection(this.y, 0, (n) => n >= 0, -1, r), this.updateDirection(this.y, a.length - 1, (n) => n < a.length, 1, r), this.updateDirection(this.x, 0, (n) => n >= 0, -1, e), this.updateDirection(this.x, a[0].length - 1, (n) => n < a[0].length, 1, e), this.scenicScore = this.visibleTrees.reduce((n, i) => n * i, 1), this.visible ? 1 : 0;
+    const o = (t) => e[t][this.x], n = (t) => e[this.y][t];
+    return this.updateDirection(this.y, 0, (t) => t >= 0, -1, o), this.updateDirection(this.y, e.length - 1, (t) => t < e.length, 1, o), this.updateDirection(this.x, 0, (t) => t >= 0, -1, n), this.updateDirection(this.x, e[0].length - 1, (t) => t < e[0].length, 1, n), this.scenicScore = this.visibleTrees.reduce((t, r) => t * r, 1), this.visible ? 1 : 0;
   }
 }
-function w4(l) {
-  let a = n4(l).map((e, n) => e.split("").map((i, d) => new E4(d, n, Number(i)))), r = new y4(a);
-  return r.updateVisibility(), r;
+function e5(s) {
+  let e = I(s).map((n, t) => n.split("").map((r, c) => new $(c, t, Number(r)))), o = new _(e);
+  return o.updateVisibility(), o;
 }
-const P4 = `300030213213113240234210203330153124541151003015456312312442524531405533542450111443312103110220211
+const t5 = `300030213213113240234210203330153124541151003015456312312442524531405533542450111443312103110220211
 133000004421300341005340432514034555543556261543410250030436135103304323425502113341331442032311030
 213121312230422241205230130541010120012561656126511652636160154566425231221254515542342023142010133
 210020103232311410025023513110540633654032560666266266442224400244155120504322112255323444432301210
@@ -489,103 +134,103 @@ const P4 = `30003021321311324023421020333015312454115100301545631231244252453140
 020023210301103025401200032420642652143243335333016204055261530250106466135400230513140242434444003
 310203111441432251152455421244135150164323516554016042002411655305545265404525521215102013341240121
 012320311100031143153052200224256541012135453345356532252242115324133425054343145333123421144111230
-311310344433212432240252542030050542510636225454204032233645040015025321421052152330422440232330022`, V = w4(P4);
-console.log(V.trees.length * V.trees[0].length);
-let I5 = V.trees.reduce(
-  (l, a) => a.reduce((r, e) => (e.scenicScore > r.m && (r.m = e.scenicScore, r.tree = e), r), l),
+311310344433212432240252542030050542510636225454204032233645040015025321421052152330422440232330022`, m = e5(t5);
+console.log(m.trees.length * m.trees[0].length);
+let D = m.trees.reduce(
+  (s, e) => e.reduce((o, n) => (n.scenicScore > o.m && (o.m = n.scenicScore, o.tree = n), o), s),
   { tree: null, m: 0 }
 ).tree;
-console.log(I5);
-const W = document.querySelector("#scene"), R5 = new b4();
-W.appendChild(R5.dom);
-function C5() {
-  B.setSize(W.clientWidth, W.clientHeight);
+console.log(D);
+const y = document.querySelector("#scene"), E = new Y();
+y.appendChild(E.dom);
+function T() {
+  b.setSize(y.clientWidth, y.clientHeight);
 }
-function H5() {
-  requestAnimationFrame(H5), B.render(f, Y), R5.update(), v.update();
+function W() {
+  requestAnimationFrame(W), b.render(a, h), E.update(), u.update();
 }
-function M4() {
-  const l = new j5(), a = 3.5, r = 2.5, e = 4.5, n = new X(0.1, e, r, 16), i = new G({ color: 2759173 }), d = new R(n, i);
-  d.position.y = a + r / 2, l.add(d);
-  const s = 3, p = new X(s, s, a, 16), g = new G({ color: 2759173 }), y = new R(p, g);
-  return y.position.y = a / 2, l.add(y), l;
+function o5() {
+  const s = new z(), e = 3.5, o = 2.5, n = 4.5, t = new g(0.1, n, o, 16), r = new w({ color: 2759173 }), c = new l(t, r);
+  c.position.y = e + o / 2, s.add(c);
+  const i = 3, f = new g(i, i, e, 16), p = new w({ color: 2759173 }), C = new l(f, p);
+  return C.position.y = e / 2, s.add(C), s;
 }
-const Y5 = 0.85, o5 = 0.15, D5 = 0.5, T4 = new X(D5, D5 + 0.1, o5, 16), O4 = new G({ color: 4203786 }), S4 = new X(0.01, 1.25, Y5, 16), k5 = [];
-function N5(l) {
-  let a = Math.sin(l * 3457.3937) * 2543.137;
-  return a = a - parseInt(a), a;
+const B = 0.85, v = 0.15, H = 0.5, n5 = new g(H, H + 0.1, v, 16), s5 = new w({ color: 4203786 }), i5 = new g(0.01, 1.25, B, 16), L = [];
+function G(s) {
+  let e = Math.sin(s * 3457.3937) * 2543.137;
+  return e = e - parseInt(e), e;
 }
-function x4(l) {
-  const a = new j5(), r = new R(T4, O4);
-  r.position.y = o5 / 2, a.add(r);
-  const e = 25;
-  let n;
-  if (l <= e) {
-    let d = Math.floor(704538 + N5(l) * 335877);
-    n = new G({ color: d }), k5.push(n);
+function r5(s) {
+  const e = new z(), o = new l(n5, s5);
+  o.position.y = v / 2, e.add(o);
+  const n = 25;
+  let t;
+  if (s <= n) {
+    let c = Math.floor(704538 + G(s) * 335877);
+    t = new w({ color: c }), L.push(t);
   } else
-    n = k5[Math.floor((N5(l) * 0.5 + 0.5) * e) % e];
-  const i = new R(S4, n);
-  return i.position.y = o5 + Y5 / 2, a.add(i), a;
+    t = L[Math.floor((G(s) * 0.5 + 0.5) * n) % n];
+  const r = new l(i5, t);
+  return r.position.y = v + B / 2, e.add(r), e;
 }
-const f = new o4(), B = new a4(), Y = new i4(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
-Y.position.x = 0;
-Y.position.z = 0;
-Y.position.y = 50;
-f.background = new n5().setHSL(0.6, 0, 1);
-f.fog = new s4(f.background, 1, 1e3);
-const L4 = new r4(6316128, 0.9);
-f.add(L4);
-const z = new c4(16777130, 16777130, 0.25);
-z.color.setHSL(0.6, 1, 0.6);
-z.groundColor.setHSL(0.095, 1, 0.75);
-z.position.set(0, 800, 0);
-f.add(z);
-const a5 = new l4(15790272, 1);
-a5.position.x = 0.3;
-a5.position.z = 0.7;
-f.add(a5);
-let A4 = 0, z5;
-V.trees.forEach((l, a) => {
-  l.forEach((r, e) => {
-    let n = x4(A4++);
-    n.position.x = (e - 49) * 4, n.position.z = (a - 49) * 4;
-    const i = Math.max(1, r.height * 2), d = r.height / 9 + 0.5;
-    if (n.scale.y = i, n.scale.x = n.scale.z = d, r === I5) {
-      let s = M4();
-      s.position.copy(n.position), s.position.y = r.height * 2 - 5, console.log(s.position), f.add(s), z5 = s;
+const a = new O(), b = new P(), h = new V(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
+h.position.x = 0;
+h.position.z = 0;
+h.position.y = 50;
+a.background = new S().setHSL(0.6, 0, 1);
+a.fog = new j(a.background, 1, 1e3);
+const a5 = new A(6316128, 0.9);
+a.add(a5);
+const d = new q(16777130, 16777130, 0.25);
+d.color.setHSL(0.6, 1, 0.6);
+d.groundColor.setHSL(0.095, 1, 0.75);
+d.position.set(0, 800, 0);
+a.add(d);
+const M = new R(15790272, 1);
+M.position.x = 0.3;
+M.position.z = 0.7;
+a.add(M);
+let c5 = 0, F;
+m.trees.forEach((s, e) => {
+  s.forEach((o, n) => {
+    let t = r5(c5++);
+    t.position.x = (n - 49) * 4, t.position.z = (e - 49) * 4;
+    const r = Math.max(1, o.height * 2), c = o.height / 9 + 0.5;
+    if (t.scale.y = r, t.scale.x = t.scale.z = c, o === D) {
+      let i = o5();
+      i.position.copy(t.position), i.position.y = o.height * 2 - 5, console.log(i.position), a.add(i), F = i;
     }
-    f.add(n);
+    a.add(t);
   });
 });
-const D4 = new h4(2e3, 2e3, 1, 1), k4 = new u4({ color: 1077280 }), q = new R(D4, k4);
-q.rotateX(Math.PI / -2);
-q.y = -0.05;
-q.receiveShadow = !0;
-f.add(q);
-const N4 = document.getElementById("vertexShader").textContent, j4 = document.getElementById("fragmentShader").textContent, i5 = {
-  topColor: { value: new n5(30719) },
-  bottomColor: { value: new n5(16777215) },
+const l5 = new N(2e3, 2e3, 1, 1), h5 = new X({ color: 1077280 }), x = new l(l5, h5);
+x.rotateX(Math.PI / -2);
+x.y = -0.05;
+x.receiveShadow = !0;
+a.add(x);
+const d5 = document.getElementById("vertexShader").textContent, u5 = document.getElementById("fragmentShader").textContent, k = {
+  topColor: { value: new S(30719) },
+  bottomColor: { value: new S(16777215) },
   offset: { value: 33 },
   exponent: { value: 0.6 }
 };
-i5.topColor.value.copy(z.color);
-f.fog.color.copy(i5.bottomColor.value);
-const I4 = new d4(900, 32, 15), R4 = new p4({
-  uniforms: i5,
-  vertexShader: N4,
-  fragmentShader: j4,
-  side: f4
-}), C4 = new R(I4, R4);
-f.add(C4);
-const v = new g4(Y, B.domElement);
-v.autoRotate = !0;
-v.target = z5.position.clone();
-console.log("looking at ", v.target);
-v.update();
-const H4 = new m4();
-H4.start();
-W.appendChild(B.domElement);
-window.addEventListener("resize", C5);
-C5();
-H5();
+k.topColor.value.copy(d.color);
+a.fog.color.copy(k.bottomColor.value);
+const f5 = new J(900, 32, 15), p5 = new K({
+  uniforms: k,
+  vertexShader: d5,
+  fragmentShader: u5,
+  side: Q
+}), g5 = new l(f5, p5);
+a.add(g5);
+const u = new Z(h, b.domElement);
+u.autoRotate = !0;
+u.target = F.position.clone();
+console.log("looking at ", u.target);
+u.update();
+const w5 = new U();
+w5.start();
+y.appendChild(b.domElement);
+window.addEventListener("resize", T);
+T();
+W();
