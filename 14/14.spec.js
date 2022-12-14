@@ -16,9 +16,10 @@ describe.only('regolith reservoar', () => {
             expect(cave[4].length).to.be.greaterThan(0);
         });
 
-        xit(`fills sand in ${input}`, () => {
-            let state = fillSand(parse(data));
-            expect(state.sand).to.equal(expected);
+        it(`fills sand in ${input}`, () => {
+            let complex = fillSand(parse(data));
+            console.log(complex);
+            expect(complex.resting.length).to.equal(expected);
         });
 
     });

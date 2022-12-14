@@ -43,12 +43,42 @@ export function parse(data) {
     };
 }
 
-export function fillSand(complex) {
-    let max = 1000;
+export function fillSand(complex, max = 10) {
     let i = 0;
-    while(true && i++ < max) {
+    let map = complex.cave;
+    let resting = [];
+    while(i++ < max) {
+        let grain = [500, 0];
+        for(let y = 1; y<=complex.bounding.maxY; y++) {
+            if (!map[y]) map[y] = [];
+
+            if (!map[y][grain[0]]) {
+                grain[1] = y;
+                continue;
+            }
+
+            if (!map[y][grain[0]-1]) {
+                grain = [grain[0]-1, y];
+                continue;
+            }
+
+            if (!map[y][grain[0]+1]) {
+                grain = [grain[0]+1, y];
+                continue;
+            }
+            
+            if (y !== complex.bounding.maxY) { 
+                map[grain[1]][grain[0]] = 'o';
+                resting.push(grain);
+                grain = [500, 0];
+                break;
+            }
+
+            break;
+        }
         
     }
 
-    return 0;
+    complex.resting = resting;
+    return complex;
 }
