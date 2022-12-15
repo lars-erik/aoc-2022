@@ -7,19 +7,30 @@
     <title>AOC day 14</title>
     <style type="text/css">
         html, body, #scene {
-            margin: 0;
-            padding: 0;
             background-color: black;
             width: 100%;
             height: 100%;
+        }
+        html, body, #scene, #count {
+            margin: 0;
+            padding: 0;
             color: white;
             font-family: sans-serif;
+        }
+        #count {
+            position: absolute;
+            z-index: 1;
+            top: 20px;
+            right: 20px;
+            font-size: 2rem;
         }
     </style>
 </head>
 <body>
+    <div id="count">
+        0
+    </div>
     <div id="scene">
-
     </div>
     <script type="x-shader/x-vertex" id="vertexShader">
 

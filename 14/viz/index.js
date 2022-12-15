@@ -48,6 +48,8 @@ const tickTime = 1;
 let speed = 20;
 let prevTick = -tickTime;
 function animate() {
+    count.innerHTML = sim.resting.length;
+
     if (!sim.done) {
 
         const elapsed = clock.getElapsedTime() * speed;
@@ -62,7 +64,21 @@ function animate() {
             for (let j = 0; j < ticks; j++) {
                 if (sim.grain[0] === 500 && sim.grain[1] === 0) {
                     if (grain && prevTo) {
-                        grain.position.copy(prevTo);
+                        if (prevTo.y < -sim.complex.bounding.maxY - 5) {
+                            scene.remove(grain);
+                            grain = null;
+
+                            if (!addedFloor && t > 200_000) {
+                                addedFloor = true;
+                                sim.enableFloor();
+                                for(let k = 0; k<floor.length; k++) {
+                                    floor[k].visible = true;
+                                }
+                            }
+
+                        } else {
+                            grain.position.copy(prevTo);
+                        }
                     }
 
                     grain = new Mesh(boxGeo, sandMat);
@@ -98,10 +114,12 @@ let grain = null,
 
 const complex = parse(data, true);
 const sim = new Simulation(complex, 5_000_000);
+sim.disableFloor();
 
 const enableControls = true;
 
 const container = document.querySelector("#scene");
+const count = document.querySelector("#count");
 const stats = new Stats();
 container.appendChild(stats.dom);
 
@@ -138,10 +156,19 @@ const rockMat = new MeshLambertMaterial({ color: 0x808a80 });
 const sandMat = new MeshLambertMaterial({ color: 0xe0ff0a });
 const boxGeo = new BoxGeometry(1.01, 1.01, 1.01);
 
+const floor = [];
+let addedFloor = false;
+
 for (let i = 0; i < complex.rockCoords.length; i++) {
     let box = new Mesh(boxGeo, rockMat);
     box.position.x = complex.rockCoords[i][0];
     box.position.y = -complex.rockCoords[i][1];
+
+    if (box.position.y < -sim.complex.bounding.maxY) {
+        box.visible = false;
+        floor.push(box);
+    }
+
     scene.add(box);
 }
 

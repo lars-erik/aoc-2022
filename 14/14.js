@@ -1,8 +1,9 @@
 import { asLines } from './../common/parsing.js';
 
-export function parse(data, addFloor) {
+export function parse(data, enableFloor) {
     const minY = 0;
     let maxY = 0;
+    let floorY;
     let minX = Number.MAX_VALUE;
     let maxX = 0;
     let lines = asLines(data)
@@ -34,14 +35,13 @@ export function parse(data, addFloor) {
         }
     }
 
-    if (addFloor) {
-        maxY += 2;
-        map[maxY-1] = [];
-        map[maxY] = [];
-        for (let x = minX - 500; x <= maxX + 500; x++) {
-            map[maxY][x] = '#';
-            rockCoords.push([x, maxY]);
-        }
+    maxY += 2;
+    floorY = maxY;
+    map[maxY-1] = [];
+    map[maxY] = [];
+    for (let x = minX - 500; x <= maxX + 500; x++) {
+        map[maxY][x] = '#';
+        rockCoords.push([x, maxY]);
     }
 
     return {
@@ -51,7 +51,8 @@ export function parse(data, addFloor) {
             minY,
             maxY,
             minX,
-            maxX
+            maxX,
+            floorY
         }
     };
 }
@@ -69,6 +70,14 @@ export class Simulation {
         if (!this.map[0]) this.map[0] = [];
     }
 
+    enableFloor() {
+        this.complex.bounding.maxY = this.complex.bounding.floorY;
+    }
+
+    disableFloor() {
+        this.complex.bounding.maxY = this.complex.bounding.floorY - 2;
+    }
+
     update() {
         let moreToDo = this.i++ < this.maxIter && !this.done;
         if (!moreToDo) return false;
@@ -76,6 +85,15 @@ export class Simulation {
         const map = this.map;
         let grain = this.grain;
         let y = grain[1] + 1;
+
+        if (y > this.complex.bounding.maxY) {
+            grain[1]++;
+            if (grain[1] > this.complex.bounding.maxY + 10) {
+                this.grain = [500, 0];
+            }
+            return true;
+        }
+
         if (!map[y]) map[y] = [];
 
         if (!map[y][grain[0]]) {
@@ -114,9 +132,14 @@ export class Simulation {
     }
 }
 
-export function fillSand(complex, maxIter = 100) {
+export function fillSand(complex, enableFloor, maxIter = 100) {
     let j = -10;
     let sim = new Simulation(complex, maxIter);
+    if (enableFloor) {
+        sim.enableFloor();
+    } else {
+        sim.disableFloor();
+    }
     while(sim.update() && j++ < maxIter) {}
     return sim;
 }

@@ -12,14 +12,14 @@ describe.only('regolith reservoar', () => {
         it(`parses area from ${input}`, () => {
             let complex = parse(data);
             let cave = complex.cave;
-            logMap(complex);
+            logMap(complex, 2);
             expect(cave.length).to.be.greaterThan(0);
-            expect(cave[cave.length-2].length).to.be.greaterThan(0);
+            expect(cave[cave.length-1].length).to.be.greaterThan(0);
         });
 
         it(`fills sand in ${input}`, () => {
-            let sim = fillSand(parse(data), 100000);
-            logMap(sim.complex);
+            let sim = fillSand(parse(data), false, 100000);
+            logMap(sim.complex, 2);
             expect(sim.resting.length).to.equal(expected);
         });
     });
@@ -33,22 +33,22 @@ describe.only('regolith reservoar', () => {
         it(`parses area with floor from ${input}`, () => {
             let complex = parse(data, true);
             let cave = complex.cave;
-            logMap(complex, 15);
+            logMap(complex, 0, 15);
             expect(cave.length).to.be.greaterThan(0);
             expect(cave[cave.length-2].length).to.be.greaterThan(0);
         });
 
         it(`fills sand in ${input} with floor`, () => {
-            let sim = fillSand(parse(data, true), 5000000);
-            logMap(sim.complex, 40);
+            let sim = fillSand(parse(data), true, 5000000);
+            logMap(sim.complex, 0, 40);
             expect(sim.resting.length).to.equal(expected);
         });
     });
     
-    function logMap(complex, addWidth = 5) {
+    function logMap(complex, removeY, addWidth = 5) {
         let map = complex.cave;
         let ascii = '';
-        for(let y = -1; y<=complex.bounding.maxY+1; y++) {
+        for(let y = -1; y<=complex.bounding.maxY+1-removeY; y++) {
             for(let x = complex.bounding.minX-addWidth; x<=complex.bounding.maxX+addWidth; x++) {
                 if (!map[y]) map[y] = [];
                 let c = map[y][x];

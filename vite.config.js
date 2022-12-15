@@ -11,6 +11,7 @@ export default defineConfig({
             name: 'aoc-2022',
             formats: ['es'],
             entry: {
+                m: './index.html',
                 d04: './04/viz/index.html',
                 d08: './08/viz/index.html',
                 d14: './14/viz/index.html',
