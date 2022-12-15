@@ -128,27 +128,27 @@ const V = `495,144 -> 499,144
 499,13 -> 499,17 -> 497,17 -> 497,25 -> 505,25 -> 505,17 -> 502,17 -> 502,13
 500,158 -> 500,159 -> 513,159`;
 function X(n, t) {
-  let e = 0, i, m = Number.MAX_VALUE, l = 0, b = J(n).map((s) => s.split(" -> ").map((p) => {
-    const a = p.split(",").map(Number);
-    return e = Math.max(e, a[1]), m = Math.min(m, a[0]), l = Math.max(l, a[0]), a;
-  })), d = [], S = [];
-  for (let s = 0; s < b.length; s++)
-    for (let p = 0; p < b[s].length - 1; p++) {
-      let a = b[s][p], w = b[s][p + 1];
-      for (let u = Math.min(a[1], w[1]); u <= Math.max(a[1], w[1]); u++)
-        for (let M = Math.min(a[0], w[0]); M <= Math.max(a[0], w[0]); M++)
-          d[u] = d[u] || [], d[u][M] = "#", S.push([M, u]);
+  let e = 0, i, d = Number.MAX_VALUE, l = 0, w = J(n).map((s) => s.split(" -> ").map((u) => {
+    const a = u.split(",").map(Number);
+    return e = Math.max(e, a[1]), d = Math.min(d, a[0]), l = Math.max(l, a[0]), a;
+  })), p = [], S = [];
+  for (let s = 0; s < w.length; s++)
+    for (let u = 0; u < w[s].length - 1; u++) {
+      let a = w[s][u], M = w[s][u + 1];
+      for (let h = Math.min(a[1], M[1]); h <= Math.max(a[1], M[1]); h++)
+        for (let y = Math.min(a[0], M[0]); y <= Math.max(a[0], M[0]); y++)
+          p[h] = p[h] || [], p[h][y] = "#", S.push([y, h]);
     }
-  e += 2, i = e, d[e - 1] = [], d[e] = [];
-  for (let s = m - 500; s <= l + 500; s++)
-    d[e][s] = "#", S.push([s, e]);
+  e += 2, i = e, p[e - 1] = [], p[e] = [];
+  for (let s = d - 500; s <= l + 500; s++)
+    p[e][s] = "#", S.push([s, e]);
   return {
-    cave: d,
+    cave: p,
     rockCoords: S,
     bounding: {
       minY: 0,
       maxY: e,
-      minX: m,
+      minX: d,
       maxX: l,
       floorY: i
     }
@@ -177,66 +177,67 @@ class n1 {
   }
 }
 function B() {
-  C.setSize(y.clientWidth, y.clientHeight);
+  C.setSize(Y.clientWidth, Y.clientHeight);
 }
 const I = 1;
-let F = 20, T = -I;
+let z = 20, F = -I;
 function N() {
   if (i1.innerHTML = r.resting.length, !r.done) {
-    const n = P.getElapsedTime() * F;
-    let t = Math.floor(n), o = n - t, e = n - T >= I, i = Math.max(1, t - T);
+    m.position.y -= 0.02, m.position.z += 0.04, b.y += -0.01;
+    const n = P.getElapsedTime() * z;
+    let t = Math.floor(n), o = n - t, e = n - F >= I, i = Math.max(1, t - F);
     if (e) {
-      F = Math.pow(F, 1.001);
-      for (let m = 0; m < i; m++) {
+      z = Math.pow(z, 1.001);
+      for (let d = 0; d < i; d++) {
         if (r.grain[0] === 500 && r.grain[1] === 0) {
           if (c && k)
             if (k.y < -r.complex.bounding.maxY - 5) {
-              if (h.remove(c), c = null, !q && t > 2e5) {
+              if (f.remove(c), c = null, !q && t > 2e5) {
                 q = !0, r.enableFloor();
                 for (let l = 0; l < W.length; l++)
                   W[l].visible = !0;
               }
             } else
               c.position.copy(k);
-          c = new H(j, s1), c.position.x = 500, h.add(c);
+          c = new H(j, s1), c.position.x = 500, f.add(c);
         }
-        _ = new A(r.grain[0], -r.grain[1], 0), k = z, r.update(), z = new A(r.grain[0], -r.grain[1], 0);
+        _ = new A(r.grain[0], -r.grain[1], 0), k = T, r.update(), T = new A(r.grain[0], -r.grain[1], 0);
       }
-      T = t;
+      F = t;
     }
-    c.position.lerpVectors(_, z, o);
+    c.position.lerpVectors(_, T, o);
   }
-  E.update(), requestAnimationFrame(N), C.render(h, f), O.update();
+  E.update(), requestAnimationFrame(N), C.render(f, m), O.update();
 }
-let c = null, _ = null, z = null, k = null;
+let c = null, _ = null, T = null, k = null;
 const g = X(V), r = new n1(g, 5e6);
 r.disableFloor();
-const y = document.querySelector("#scene"), i1 = document.querySelector("#count"), O = new t1();
-y.appendChild(O.dom);
-const P = new K(), h = new Q(), Y = new A(500, g.bounding.maxY / -2, 0), C = new Z(), f = new $(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
-f.position.x = Y.x;
-f.position.z = 210;
-f.position.y = Y.y;
-f.lookAt(Y);
+const Y = document.querySelector("#scene"), i1 = document.querySelector("#count"), O = new t1();
+Y.appendChild(O.dom);
+const P = new K(), f = new Q(), b = new A(500, g.bounding.maxY / -2 + 30, 0), C = new Z(), m = new $(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
+m.position.x = b.x - 25;
+m.position.z = 100;
+m.position.y = b.y + 85;
+m.lookAt(b);
 let E = null;
-E = new o1(f, C.domElement), E.target = Y;
+E = new o1(m, C.domElement), E.target = b;
 const v = new D(15790320, 0.9);
 v.position.x = 5;
 v.position.z = 7;
 v.position.y = 1;
-h.add(v);
+f.add(v);
 const L = new D(14737632, 0.7);
 L.position.x = -5;
 L.position.z = -5;
 L.position.y = 10;
-h.add(L);
+f.add(L);
 const r1 = new G({ color: 8424064 }), s1 = new G({ color: 14745354 }), j = new e1(1.01, 1.01, 1.01), W = [];
 let q = !1;
 for (let n = 0; n < g.rockCoords.length; n++) {
   let t = new H(j, r1);
-  t.position.x = g.rockCoords[n][0], t.position.y = -g.rockCoords[n][1], t.position.y < -r.complex.bounding.maxY && (t.visible = !1, W.push(t)), h.add(t);
+  t.position.x = g.rockCoords[n][0], t.position.y = -g.rockCoords[n][1], t.position.y < -r.complex.bounding.maxY && (t.visible = !1, W.push(t)), f.add(t);
 }
-y.appendChild(C.domElement);
+Y.appendChild(C.domElement);
 window.addEventListener("resize", B);
 B();
 P.start();
