@@ -51,6 +51,9 @@ function animate() {
     count.innerHTML = sim.resting.length;
 
     if (!sim.done) {
+        camera.position.y -= .02;
+        camera.position.z += .04;
+        focusPoint.y += -.01; 
 
         const elapsed = clock.getElapsedTime() * speed;
         let t = Math.floor(elapsed);
@@ -125,13 +128,13 @@ container.appendChild(stats.dom);
 
 const clock = new Clock();
 const scene = new Scene();
-const focusPoint = new Vector3(500, complex.bounding.maxY / -2, 0);
+const focusPoint = new Vector3(500, complex.bounding.maxY / -2 + 30, 0);
 
 const renderer = new WebGLRenderer();
 const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.x = focusPoint.x;
-camera.position.z = 210;
-camera.position.y = focusPoint.y;
+camera.position.x = focusPoint.x - 25;
+camera.position.z = 100;
+camera.position.y = focusPoint.y + 85;
 camera.lookAt(focusPoint);
 
 let controls = null;
