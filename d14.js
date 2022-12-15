@@ -1,9 +1,9 @@
-var P = Object.defineProperty;
-var j = (i, e, n) => e in i ? P(i, e, { enumerable: !0, configurable: !0, writable: !0, value: n }) : i[e] = n;
-var u = (i, e, n) => (j(i, typeof e != "symbol" ? e + "" : e, n), n);
-import { a as F, C as R, S as U, k as E, W as J, e as K, g as D, h as G, o as Q, M as V } from "./parsing.c9e1c62d.js";
-import { S as Z, O as $ } from "./stats.module.a5aba488.js";
-const X = `495,144 -> 499,144
+var R = Object.defineProperty;
+var U = (n, t, o) => t in n ? R(n, t, { enumerable: !0, configurable: !0, writable: !0, value: o }) : n[t] = o;
+var x = (n, t, o) => (U(n, typeof t != "symbol" ? t + "" : t, o), o);
+import { a as J, C as K, S as Q, k as A, W as Z, e as $, g as D, h as G, o as e1, M as H } from "./parsing.c9e1c62d.js";
+import { S as t1, O as o1 } from "./stats.module.a5aba488.js";
+const V = `495,144 -> 499,144
 492,40 -> 492,43 -> 484,43 -> 484,50 -> 499,50 -> 499,43 -> 496,43 -> 496,40
 499,13 -> 499,17 -> 497,17 -> 497,25 -> 505,25 -> 505,17 -> 502,17 -> 502,13
 504,141 -> 508,141
@@ -127,97 +127,118 @@ const X = `495,144 -> 499,144
 507,181 -> 507,171 -> 507,181 -> 509,181 -> 509,173 -> 509,181 -> 511,181 -> 511,176 -> 511,181 -> 513,181 -> 513,176 -> 513,181
 499,13 -> 499,17 -> 497,17 -> 497,25 -> 505,25 -> 505,17 -> 502,17 -> 502,13
 500,158 -> 500,159 -> 513,159`;
-function _(i, e) {
-  let t = 0, o = Number.MAX_VALUE, l = 0, x = F(i).map((r) => r.split(" -> ").map((m) => {
-    const s = m.split(",").map(Number);
-    return t = Math.max(t, s[1]), o = Math.min(o, s[0]), l = Math.max(l, s[0]), s;
-  })), c = [], S = [];
-  for (let r = 0; r < x.length; r++)
-    for (let m = 0; m < x[r].length - 1; m++) {
-      let s = x[r][m], w = x[r][m + 1];
-      for (let d = Math.min(s[1], w[1]); d <= Math.max(s[1], w[1]); d++)
-        for (let M = Math.min(s[0], w[0]); M <= Math.max(s[0], w[0]); M++)
-          c[d] = c[d] || [], c[d][M] = "#", S.push([M, d]);
+function X(n, t) {
+  let e = 0, i, m = Number.MAX_VALUE, l = 0, b = J(n).map((s) => s.split(" -> ").map((p) => {
+    const a = p.split(",").map(Number);
+    return e = Math.max(e, a[1]), m = Math.min(m, a[0]), l = Math.max(l, a[0]), a;
+  })), d = [], S = [];
+  for (let s = 0; s < b.length; s++)
+    for (let p = 0; p < b[s].length - 1; p++) {
+      let a = b[s][p], w = b[s][p + 1];
+      for (let u = Math.min(a[1], w[1]); u <= Math.max(a[1], w[1]); u++)
+        for (let M = Math.min(a[0], w[0]); M <= Math.max(a[0], w[0]); M++)
+          d[u] = d[u] || [], d[u][M] = "#", S.push([M, u]);
     }
-  if (e) {
-    t += 2, c[t - 1] = [], c[t] = [];
-    for (let r = o - 500; r <= l + 500; r++)
-      c[t][r] = "#", S.push([r, t]);
-  }
+  e += 2, i = e, d[e - 1] = [], d[e] = [];
+  for (let s = m - 500; s <= l + 500; s++)
+    d[e][s] = "#", S.push([s, e]);
   return {
-    cave: c,
+    cave: d,
     rockCoords: S,
     bounding: {
       minY: 0,
-      maxY: t,
-      minX: o,
-      maxX: l
+      maxY: e,
+      minX: m,
+      maxX: l,
+      floorY: i
     }
   };
 }
-class t1 {
-  constructor(e, n = 100) {
-    u(this, "i", 0);
-    u(this, "resting", []);
-    u(this, "done", !1);
-    u(this, "grain", [500, 0]);
-    this.complex = e, this.maxIter = n, this.map = e.cave, this.map[0] || (this.map[0] = []);
+class n1 {
+  constructor(t, o = 100) {
+    x(this, "i", 0);
+    x(this, "resting", []);
+    x(this, "done", !1);
+    x(this, "grain", [500, 0]);
+    this.complex = t, this.maxIter = o, this.map = t.cave, this.map[0] || (this.map[0] = []);
+  }
+  enableFloor() {
+    this.complex.bounding.maxY = this.complex.bounding.floorY;
+  }
+  disableFloor() {
+    this.complex.bounding.maxY = this.complex.bounding.floorY - 2;
   }
   update() {
     if (!(this.i++ < this.maxIter && !this.done))
       return !1;
-    const n = this.map;
-    let t = this.grain, o = t[1] + 1;
-    return n[o] || (n[o] = []), n[o][t[0]] ? n[o][t[0] - 1] ? n[o][t[0] + 1] ? n[o][t[0]] && n[o][t[0] - 1] && n[o][t[0] + 1] ? (n[t[1]][t[0]] = "o", this.resting.push(t), t[1] === 0 && t[0] === 500 ? (this.done = !0, !1) : (this.grain = [500, 0], !0)) : (this.done = !0, !1) : (t[1] = o, t[0] = t[0] + 1, !0) : (t[1] = o, t[0] = t[0] - 1, !0) : (t[1] = o, !0);
+    const o = this.map;
+    let e = this.grain, i = e[1] + 1;
+    return i > this.complex.bounding.maxY ? (e[1]++, e[1] > this.complex.bounding.maxY + 10 && (this.grain = [500, 0]), !0) : (o[i] || (o[i] = []), o[i][e[0]] ? o[i][e[0] - 1] ? o[i][e[0] + 1] ? o[i][e[0]] && o[i][e[0] - 1] && o[i][e[0] + 1] ? (o[e[1]][e[0]] = "o", this.resting.push(e), e[1] === 0 && e[0] === 500 ? (this.done = !0, !1) : (this.grain = [500, 0], !0)) : (this.done = !0, !1) : (e[1] = i, e[0] = e[0] + 1, !0) : (e[1] = i, e[0] = e[0] - 1, !0) : (e[1] = i, !0));
   }
 }
-function q() {
-  y.setSize(k.clientWidth, k.clientHeight);
+function B() {
+  C.setSize(y.clientWidth, y.clientHeight);
 }
-const B = 1;
-let v = 20, z = -B;
-function H() {
-  if (!a.done) {
-    const i = N.getElapsedTime() * v;
-    let e = Math.floor(i), n = i - e, t = i - z >= B, o = Math.max(1, e - z);
-    if (t) {
-      v = Math.pow(v, 1.001);
-      for (let l = 0; l < o; l++)
-        a.grain[0] === 500 && a.grain[1] === 0 && (p && A && p.position.copy(A), p = new V(O, n1), p.position.x = 500, g.add(p)), Y = new E(a.grain[0], -a.grain[1], 0), A = T, a.update(), T = new E(a.grain[0], -a.grain[1], 0);
-      z = e;
+const I = 1;
+let F = 20, T = -I;
+function N() {
+  if (i1.innerHTML = r.resting.length, !r.done) {
+    const n = P.getElapsedTime() * F;
+    let t = Math.floor(n), o = n - t, e = n - T >= I, i = Math.max(1, t - T);
+    if (e) {
+      F = Math.pow(F, 1.001);
+      for (let m = 0; m < i; m++) {
+        if (r.grain[0] === 500 && r.grain[1] === 0) {
+          if (c && k)
+            if (k.y < -r.complex.bounding.maxY - 5) {
+              if (h.remove(c), c = null, !q && t > 2e5) {
+                q = !0, r.enableFloor();
+                for (let l = 0; l < W.length; l++)
+                  W[l].visible = !0;
+              }
+            } else
+              c.position.copy(k);
+          c = new H(j, s1), c.position.x = 500, h.add(c);
+        }
+        _ = new A(r.grain[0], -r.grain[1], 0), k = z, r.update(), z = new A(r.grain[0], -r.grain[1], 0);
+      }
+      T = t;
     }
-    p.position.lerpVectors(Y, T, n);
+    c.position.lerpVectors(_, z, o);
   }
-  W.update(), requestAnimationFrame(H), y.render(g, h), I.update();
+  E.update(), requestAnimationFrame(N), C.render(h, f), O.update();
 }
-let p = null, Y = null, T = null, A = null;
-const f = _(X, !0), a = new t1(f, 5e6), k = document.querySelector("#scene"), I = new Z();
-k.appendChild(I.dom);
-const N = new R(), g = new U(), b = new E(500, f.bounding.maxY / -2, 0), y = new J(), h = new K(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
-h.position.x = b.x;
-h.position.z = 210;
-h.position.y = b.y;
-h.lookAt(b);
-let W = null;
-W = new $(h, y.domElement), W.target = b;
-const C = new D(15790320, 0.9);
-C.position.x = 5;
-C.position.z = 7;
-C.position.y = 1;
-g.add(C);
+let c = null, _ = null, z = null, k = null;
+const g = X(V), r = new n1(g, 5e6);
+r.disableFloor();
+const y = document.querySelector("#scene"), i1 = document.querySelector("#count"), O = new t1();
+y.appendChild(O.dom);
+const P = new K(), h = new Q(), Y = new A(500, g.bounding.maxY / -2, 0), C = new Z(), f = new $(50, window.innerWidth / window.innerHeight, 0.1, 1e3);
+f.position.x = Y.x;
+f.position.z = 210;
+f.position.y = Y.y;
+f.lookAt(Y);
+let E = null;
+E = new o1(f, C.domElement), E.target = Y;
+const v = new D(15790320, 0.9);
+v.position.x = 5;
+v.position.z = 7;
+v.position.y = 1;
+h.add(v);
 const L = new D(14737632, 0.7);
 L.position.x = -5;
 L.position.z = -5;
 L.position.y = 10;
-g.add(L);
-const e1 = new G({ color: 8424064 }), n1 = new G({ color: 14745354 }), O = new Q(1.01, 1.01, 1.01);
-for (let i = 0; i < f.rockCoords.length; i++) {
-  let e = new V(O, e1);
-  e.position.x = f.rockCoords[i][0], e.position.y = -f.rockCoords[i][1], g.add(e);
+h.add(L);
+const r1 = new G({ color: 8424064 }), s1 = new G({ color: 14745354 }), j = new e1(1.01, 1.01, 1.01), W = [];
+let q = !1;
+for (let n = 0; n < g.rockCoords.length; n++) {
+  let t = new H(j, r1);
+  t.position.x = g.rockCoords[n][0], t.position.y = -g.rockCoords[n][1], t.position.y < -r.complex.bounding.maxY && (t.visible = !1, W.push(t)), h.add(t);
 }
-k.appendChild(y.domElement);
-window.addEventListener("resize", q);
-q();
-N.start();
-H();
-console.log(_(X));
+y.appendChild(C.domElement);
+window.addEventListener("resize", B);
+B();
+P.start();
+N();
+console.log(X(V));
