@@ -48,6 +48,9 @@ export function countNonBeacons(data, inY) {
             seenX.push([x, inY]);
         }
     }
-    
+
+    console.log(sensors);
+    console.log(minX, maxX);
+
     return seenX.length;
 }

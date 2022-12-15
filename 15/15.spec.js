@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { getData } from './../common/input.js';
 import { countNonBeacons } from './15.js';
 
-describe('beacon exclusion zone', () => {
+describe.only('beacon exclusion zone', () => {
     [
         {input: 'sample', inY: 10, expected: 26},
         {input: 'input', inY: 2_000_000, expected: 4961647},
