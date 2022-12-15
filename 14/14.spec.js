@@ -2,7 +2,7 @@ import { getData } from './../common/input.js';
 import { parse, fillSand } from './14.js';
 import { expect } from 'chai';
 
-describe.only('regolith reservoar', () => {
+describe('regolith reservoar', () => {
     [
         {input:'sample', expected: 24},
         {input:'input', expected: 638},
